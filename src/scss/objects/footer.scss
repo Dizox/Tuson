@@ -1,0 +1,149 @@
+.footer {
+  background-color: $c-primary;
+  padding: 100px 0;
+  border-bottom: 8px solid $c-warning;
+
+  @include tablets {
+    padding: 60px 0;
+  }
+
+  p {
+    color: #fff;
+    font-weight: 700;
+  }
+
+  &__row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  &__col {
+    display: flex;
+    flex-wrap: wrap;
+
+    &:first-child {
+      width: calc(60% - 15px);
+      display: flex;
+      justify-content: space-between;
+
+      @include medium {
+        width: 100%;
+      }
+    }
+
+    &:last-child {
+      width: calc(40% - 15px);
+      flex-direction: column;
+      align-items: flex-end;
+      padding-top: 30px;
+      justify-content: space-between;
+
+      @include medium {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        padding-top: 70px;
+      }
+
+      @include tablets {
+        padding-top: 20px;
+      }
+
+      @include tablets {
+        div:nth-child(2) {
+          font-size: 14px;
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  &__logo {
+    margin-bottom: 35px;
+  }
+
+  &__left {
+    text-align: center;
+    width: calc(50% - 70px);
+
+    @include tablets {
+      width: 100%;
+    }
+  }
+
+  &__right {
+    display: flex;
+    padding-top: 30px;
+
+    @include tablets {
+      width: 100%;
+      justify-content: space-between;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+  }
+
+  &__list {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+
+    &:first-child {
+      margin-right: 100px;
+
+      @include tablets {
+        margin-right: 0;
+      }
+    }
+
+    &-link {
+      @include link-underline;
+      text-decoration: none;
+      font-size: 14px;
+      text-transform: uppercase;
+      color: #fff;
+      letter-spacing: 2.63px;
+      margin-bottom: 35px;
+      display: inline-block;
+      font-weight: 700;
+    }
+  }
+
+  &__social {
+    font-size: 24px;
+    color: #fff;
+
+    &:first-child {
+      margin-right: 30px;
+
+      @include tablets {
+        margin-right: 20px;
+      }
+    }
+  }
+
+  &__mail {
+    color: #fff;
+    text-decoration: none;
+
+    &:hover {
+      color: darken(#fff, 15%);
+    }
+  }
+
+  span {
+    color: #fff;
+  }
+
+  .copyright {
+    opacity: 0.7;
+    color: #fff;
+
+    @include tablets {
+      margin-top: 40px;
+      width: 100%;
+      text-align: center;
+    }
+  }
+}

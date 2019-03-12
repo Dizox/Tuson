@@ -1,0 +1,15 @@
+mixin services(data)
+    section.services
+        .container
+            .services__title= data.title
+            .services__row
+                each item in data.items
+                    .services__col
+                        .services__col-img(style=`background-color: ${item.color}`)
+                        .services__title-block
+                            .services__col-title= item.title
+                            a.btn.btn--small(href=`${item.buttonLink}`)= item.buttonText
+                        ul.services__list
+                            each list in item.list
+                                li.services__list-item= list
+                        a.btn.btn--small.services__mobile-btn(href=`${item.buttonLink}`)= item.buttonText

@@ -1,0 +1,33 @@
+/* Colors */
+$c-white: #fff;
+$c-black: #000;
+$c-text: #212121;
+$c-primary: #148ba5;
+$c-warning: #f4dd2d;
+$c-error: #fa7268;
+
+/* Fonts */
+$main-font: "ProximaNova";
+$secondary-font: "PlayfairDisplay";
+
+/* Base variables */
+$main-font-size: 16px;
+$main-line-height: 1.5;
+$heading-font: $main-font;
+$heading-line-height: 1.1;
+$main-bg: $c-white;
+$main-text-color: $c-text;
+$secondary-text-color: $c-white;
+$link-color: $main-text-color;
+$default-transition-time: 0.3s;
+$default-transition: all $default-transition-time ease;
+
+/* Media variables */
+$phones:   480px;
+$l-phones: 575px;
+$tablets:  768px;
+$medium:   991px;
+$large:    1199px;
+$x-large:  1439px;
+
+$m-retina2x: screen and (min-resolution: 120dpi), screen and (min-resolution: 1.25dppx);

@@ -1,0 +1,137 @@
+extends layout/base
+
+block page-title
+  title Lantana style
+
+block page-content
+  -
+    var dataColumns1 = {
+        desc: [
+        "LYNN CALZADA,LYNN CALZADA,",
+        "YOUR CERTIFIED IMAGE CONSULTANT.",
+        "HELPING YOU LOOK AND FEEL YOUR ABSOLUTE BEST."
+        ],
+        title: "There are only four ways we have contact with the world and we are continuously judged and classified by them:",
+        list: [
+            "How we look",
+            "What we do",
+            "What we say",
+            "How we say it"
+        ],
+        buttonText: "let's get started",
+        buttonLink: "#",
+        autor: "Dale Carnegie",
+        img: "../img/Lynn-homepage.png",
+        color: "img-square--yellow"
+    }
+
+  -
+    var dataColumns2 = {
+        title: "The ABC's for enhancing your image:",
+        list: [
+            "Appearance",
+            "Behavior",
+            "Communication"
+        ],
+        buttonText: "read more",
+        buttonLink: "#",
+        img: "../img/Corporate-1to1-people.png",
+        color: "img-square--right img-square--red",
+        class: "reverse"
+    }
+
+  -
+    var dataColumns3 = {
+        desc: [
+        "GREAT STYLE FOR EVERYONE"
+        ],
+        title: "Unlock Your Personal Style",
+        text: true,
+        buttonText: "book a free consultation",
+        buttonLink: "#",
+        img: "../img/Male-Personal-shopping.png",
+        color: "img-square--blue"
+    }
+
+  -
+    var dataColumns4 = {
+        title: "Write to Me",
+        form: true,
+        img: "../img/LYNN-0678.png",
+        color: "img-square--right img-square--red",
+        class: "reverse form-col"
+    }
+
+  -
+    var dataServices = {
+        title: "SERVICES FOR WOMEN AND MEN",
+        items: [
+            {
+                title: "Female",
+                color: "#f4dd2d",
+                buttonText: "learn more",
+                buttonLink: "#",
+                list: [
+                    [
+                        "Wardrobe & Closet edit"
+                    ],
+                    [
+                        "Hair"
+                    ],
+                    [
+                        "Make-up"
+                    ],
+                    [
+                        "& More..."
+                    ]
+                ]
+            },
+            {
+                title: "Male",
+                color: "#f4dd2d",
+                buttonText: "learn more",
+                buttonLink: "#",
+                list: [
+                    [
+                        "Wardrobe & Closet edit"
+                    ],
+                    [
+                        "Grooming"
+                    ],
+                    [
+                        "Public speaking"
+                    ],
+                    [
+                        "& More..."
+                    ]
+                ]
+            },
+            {
+                title: "Corporate",
+                color: "#f4dd2d",
+                buttonText: "learn more",
+                buttonLink: "#",
+                list: [
+                    [
+                    "Executive Presence Training"
+                    ],
+                    [
+                    "Group presentations"
+                    ],
+                    [
+                    "& More..."
+                    ]
+                ]
+            }
+        ]
+    }
+
+  main.main-content
+    +twoColumn(dataColumns1)
+    +twoColumn(dataColumns2)
+    +services(dataServices)
+    +twoColumn(dataColumns3)
+    +twoColumn(dataColumns4)
+
+
+
