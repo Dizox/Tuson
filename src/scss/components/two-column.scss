@@ -11,6 +11,17 @@
     .call__col {
       margin-top: 40px;
     }
+
+  }
+
+  &__textContact{
+    color: #212121;
+    font-family: "PlayfairDisplay";
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 0.29px;
+    line-height: 48px;
+    max-width: 430px;
   }
 
   &__row {
@@ -31,6 +42,10 @@
           bottom: -40px;
         }
       }
+    }
+
+    &.noAlignCenter{
+      align-items: flex-start;
     }
 
     &.reverse {

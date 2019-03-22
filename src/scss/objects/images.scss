@@ -35,6 +35,12 @@
     }
   }
 
+  &--purple{
+    &::before{
+      background-color: $c-purple;
+    }
+  }
+
   &--right {
     margin-left: initial;
     margin-right: 65px;

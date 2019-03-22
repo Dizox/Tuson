@@ -1,0 +1,9 @@
+mixin slider(data)
+    section.slider
+        .slider__container.owl-carousel
+            each item in data.items
+                .slider__item
+                    img(src=`${item.img}`)
+            each item in data.items 
+                .slider__item
+                    img(src=`${item.img}`)

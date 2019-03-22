@@ -7,4 +7,5 @@ import './fonts/main.css';
 import './scss/main.scss';
 
 /* Scripts */
+import './js/modules/slider';
 import './js/main';
