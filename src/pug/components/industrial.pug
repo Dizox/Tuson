@@ -1,0 +1,13 @@
+mixin industrial(data)
+  section.industrial
+    .wrapper
+      .industrial__text= data.beforeTitle 
+      h2.industrial__title= data.title
+      .line  
+      .industrial__container
+        .industrial__column
+          each item in data.text
+            .industrial__text= item
+        .industrial__flexColumn
+          each item in data.img
+            img.industrial__item(src=`${item}`)

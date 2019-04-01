@@ -1,20 +1,29 @@
-header.header
-  .container
-    .header__content
-      a.header__hamburger(href="#").js-hamburger
-        i.fal.fa-bars.header__hamburger-open
-        i.fal.fa-times.header__hamburger-close
-      img.header__logo(src="../img/logo.svg")
-      nav.header__nav
-        .header__nav-row
-          a.header__nav-link(href="#") about
-          a.header__nav-link(href="#") female
-          a.header__nav-link(href="#") male
-          a.header__nav-link(href="#") corporate
-          a.header__nav-link(href="#") contact
-      a.header__phone(href="tel:+8722056969")
-        i.fal.fa-phone.header__phone-icon
-        span.header__phone-text (872) 205-6969
+noscript
+  p Please enable Javascript
 
-
-
+header.header(style='{background: url("../../img/header_background.jpg") no-repeat 0px 64px /cover}')
+  .wrapper.wrapper_header
+    .header__container
+      .header__phone-ver
+        button.nav-toggle
+          span.bar-top
+          span.bar-mid
+          span.bar-bot
+        .header__containerLogo
+          a(href="#")
+            img.header__logo.header__logo_phone(src="../../img/header_logo.svg")
+      a(href="#")
+        img.header__logo(src="../../img/header_logo.svg")
+      nav.header__column
+        a.header__link(href="#") About Us
+        a.header__link(href="#") Services 
+        a.header__link(href="#") Capabilities
+        a.header__link(href="#") Projects
+        a.header__link(href="#") News
+        a.header__link(href="#") Contact
+        +button({name: "Request a quote"})
+        
+    h1.header__title Continuous improvement processes, people, parts 
+    .line
+    .header__text Cost effective custom machined hydraulic and electric assemblies and components.
+    +button({name: "Request a quote"})

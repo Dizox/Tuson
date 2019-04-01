@@ -1,0 +1,9 @@
+mixin aboutUs(data)
+  section.aboutUs(style="{background-image: url(../../img/aboutUs_background.jpg)}")
+    .wrapper
+      .aboutUs__text.aboutUs__text_beforeTitle= data.beforeTitle
+      h2.aboutUs__title= data.title
+      .line.line_aboutUs
+      each item in data.text
+        .aboutUs__text= item
+      a.aboutUs__link(href="#" rel="nofollow")= data.link

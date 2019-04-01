@@ -1,0 +1,16 @@
+.line {
+  width: 79px;
+  height: 6px;
+  background-color: $c-button;
+  clip-path: polygon(136% -62%, 101% 100%, 8% 100%, 0% 0%);
+  transform: scale(-1, 1);
+
+  &_call {
+    margin-top: 31px;
+    margin-bottom: 25px;
+  }
+
+  &_aboutUs {
+    margin-bottom: 30px;
+  }
+}

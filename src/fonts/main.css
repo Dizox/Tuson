@@ -1,29 +1,41 @@
 @font-face {
-    font-family: "PlayfairDisplay";
-    src: url(PlayfairDisplay/PlayfairDisplay-Bold.ttf) format('truetype');
-    font-weight: 700;
+  src: url("WorkSans-Regular.woff2") format('woff2'),
+       url("WorkSans-Regular.woff") format('woff');
+  font-family: "Work Sans";
+  font-weight: 400;
 }
 
 @font-face {
-    font-family: "PlayfairDisplay";
-    src: url(PlayfairDisplay/PlayfairDisplay-Regular.ttf) format('truetype');
-    font-weight: 400;
+  src: url("WorkSans-Medium.woff2") format('woff2'),
+       url("WorkSans-Medium.woff") format('woff');
+  font-family: "Work Sans";
+  font-weight: 500;
 }
 
 @font-face {
-    font-family: "ProximaNova";
-    src: url(ProximaNova/ProximaNova-Bold.ttf) format('truetype');
-    font-weight: 700;
+  src: url("WorkSans-Bold.woff2") format('woff2'),
+       url("WorkSans-Bold.woff") format('woff');
+  font-family: "Work Sans";
+  font-weight: 700;
 }
 
 @font-face {
-    font-family: "ProximaNova";
-    src: url(ProximaNova/ProximaNova-Regular.ttf) format('truetype');
-    font-weight: 400;
+  src: url("RobotoCondensed-Regular.woff2") format('woff2'),
+       url("RobotoCondensed-Regular.woff") format('woff');
+  font-family: "RobotoCondensed";
+  font-weight: 400;
 }
 
 @font-face {
-    font-family: "ProximaNova";
-    src: url(ProximaNova/ProximaNova-Light.ttf) format('truetype');
-    font-weight: 300;
+  src: url("LibreBaskerville-Italic.woff2") format('woff2'),
+       url("LibreBaskerville-Italic.woff") format('woff');
+  font-family: "LibreBaskerville";
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  src: url("LucidaGrande.woff2") format('woff2'),
+       url("LucidaGrande.woff") format('woff');
+  font-family: "LucidaGrande";
 }

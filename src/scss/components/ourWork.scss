@@ -1,0 +1,133 @@
+.ourWork {
+  width: 100%;
+  padding: 98px 0px 105px 0px;
+  background: url("../img/ourWork_background.jpg") no-repeat center/cover;
+
+  &__container {
+    display: flex;
+    justify-content: space-between;
+
+    @include big-phones {
+      margin-bottom: 20px;
+      flex-direction: column;
+    }
+  }
+
+  &__title {
+    width: 80%;
+    color: $c-text;
+    font-family: "RobotoCondensed";
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 42px;
+    text-transform: uppercase;
+    margin-bottom: 31px;
+
+    @include u-l-phones {
+      margin-bottom: 20px;
+    }
+  }
+
+  &__text {
+    color: $c-text;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+
+    &_mod {
+      max-width: 560px;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+
+    @include medium {
+      justify-content: space-between;
+    }
+  }
+
+  &__item {
+    width: 23%;
+    margin-right: 2.5%;
+    margin-top: 60px;
+    text-align: center;
+
+    &:nth-child(4n+4){
+      margin-right: 0px;
+    }
+
+    @include large {
+      width: 23%;
+      margin-right: 2.5%;
+    }
+
+    @include medium {
+      width: 30%;
+      margin-right: 0px;
+      margin-top: 60px;
+    }
+
+    @include tablets {
+      width: 45%;
+    }
+
+    @include big-phones {
+      width: 100%;
+    }
+  }
+
+  &__img {
+    width: 100%;
+    margin-bottom: 36px;
+    display: block;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  &__itemTitle{
+    display: inline;
+    color: $c-text;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 32px;
+    text-transform: uppercase;
+
+    &:hover{
+      box-shadow: 0 1px 0px 0px $c-text;
+    }
+  }
+
+  &__itemText{
+    width: max-content;
+    color: $c-text;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    margin: 40px auto 30px auto;
+
+    &_smallMargin{
+      margin-top: 8px;
+    }
+
+    @include big-phones {
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+  }
+
+  &__itemLink{
+    width: max-content;
+    color: $c-button;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+
+    &:hover{
+      text-decoration: underline;
+    }
+  }
+}

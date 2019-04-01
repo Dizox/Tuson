@@ -1,0 +1,9 @@
+mixin advantages(data)
+  section.advantages
+    .wrapper
+      .advantages__list
+        each item in data.items
+          .advantages__item
+            img.advantages__itemImg(src=`${item.img}`)
+            .advantages__itemTitle= item.title
+            .advantages__itemText= item.text

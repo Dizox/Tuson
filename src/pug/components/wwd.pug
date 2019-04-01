@@ -1,0 +1,13 @@
+mixin wwd(data)
+  section.wwd
+    .wrapper.wwd__wrapper
+      .wwd__text.wwd__text_noMargin.wwd__textBeforeTitle= data.beforeTitle 
+      h2.wwd__title.wwd__title_big= data.title 
+      .line
+      .wwd__list
+        each item in data.items
+          .wwd__item
+            .wwd__circle
+              .wwd__img
+            h3.wwd__title= item.title
+            .wwd__text= item.text

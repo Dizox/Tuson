@@ -15263,38 +15263,41 @@ __webpack_require__(25)('observable');
 var _jquery = __webpack_require__(37);var _jquery2 = _interopRequireDefault(_jquery);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 
 (0, _jquery2.default)(document).ready(function () {
-    (0, _jquery2.default)('.js-hamburger').click(function (e) {
-        e.preventDefault();
-        (0, _jquery2.default)(this).toggleClass('active');
-        (0, _jquery2.default)('.header__nav').toggleClass('active');
+    var toggle = document.querySelector('.nav-toggle');
+    var oldHeight;
+    var newHeight;
+    toggle.addEventListener('click', function (e) {
+        this.classList.toggle('opened');
+        (0, _jquery2.default)(".header__column").toggle();
     });
 
-    (0, _jquery2.default)(".owl-carousel").owlCarousel({
-        items: 5,
-        nav: true, //nav arrows
-        dots: false,
-        touchDrag: true,
-        mouseDrag: true,
-        loop: true, //cycle
-        responsiveClass: true, //turn adaptive
-        responsive: { //adaptive
-            0: {
-                items: 1 },
+    //slider
+    (0, _jquery2.default)(document).ready(function () {
+        (0, _jquery2.default)(".owl-carousel").owlCarousel({
+            items: 1,
+            nav: true, //nav arrows
+            dots: false,
+            touchDrag: true,
+            mouseDrag: false,
+            loop: true //cycle
+        });
 
-            420: {
-                items: 2 },
+        (0, _jquery2.default)(".owl-prev > span, .owl-next > span").empty();
+    });
+});
 
-            650: {
-                items: 3 },
-
-            1000: {
-                items: 4 },
-
-            1400: {
-                items: 5 } } });
-
-
-
+//sticky header
+(0, _jquery2.default)(document).scroll(function () {
+    var s_top = (0, _jquery2.default)(this).scrollTop();
+    if (s_top > 1) {
+        (0, _jquery2.default)(".header__container").addClass("header__container_sticky");
+        (0, _jquery2.default)(".header__logo").addClass("header__logo_sticky");
+        (0, _jquery2.default)(".header__title").addClass("header__title_sticky");
+    } else {
+        (0, _jquery2.default)(".header__container").removeClass("header__container_sticky");
+        (0, _jquery2.default)(".header__logo").removeClass("header__logo_sticky");
+        (0, _jquery2.default)(".header__title").removeClass("header__title_sticky");
+    }
 });
 
 /***/ })

@@ -1,0 +1,15 @@
+.aboutInfo{
+    width: 100%;
+    padding-top: 63px;
+    padding-bottom: 48px;
+    background: url("../img/aboutInfo_background.jpg") no-repeat center/cover;
+
+    &__text {
+      max-width: 762px;
+      color: $c-text;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      padding-bottom: 25px;
+    }
+}

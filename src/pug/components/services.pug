@@ -1,15 +1,11 @@
 mixin services(data)
-    section.services
-        .container
-            h3.services__title= data.title
-            .services__row
-                each item in data.items
-                    .services__col
-                        .services__col-img(style=`background-color: ${item.color}`)
-                        .services__title-block
-                            h4.services__col-title= item.title
-                            a.btn.btn--small(href=`${item.buttonLink}`)= item.buttonText
-                        ul.services__list
-                            each list in item.list
-                                li.services__list-item= list
-                        a.btn.btn--small.services__mobile-btn(href=`${item.buttonLink}`)= item.buttonText
+  section.services(style="{background-image: url(../../img/services_background.jpg)}")
+    .wrapper.wrapper_services
+      .services__card
+        h2.services__title= data.title
+        .line
+      each item in data.items
+        a.services__card.services__cardCenter(href="#" rel="nofollow" style="{background-image: url(../../img/services_itemBack1.jpg)}")
+          .services__cardFilter
+          .services__cardTitle 
+            .services__cardTitleText= item.text

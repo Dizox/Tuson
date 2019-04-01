@@ -1,8 +1,0 @@
-mixin infobar(data)
-    section.infobar
-        .container
-            .infobar__wrapper
-                .h3= data.title
-                .infobar__text= data.text 
-                if data.buttonText
-                    a.btn(href=`${data.buttonLink}`)= data.buttonText

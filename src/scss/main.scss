@@ -18,20 +18,30 @@
 
 /* Objects */
 @import "./objects/typography";
-@import "./objects/buttons";
 @import "./objects/header";
 @import "./objects/footer";
-@import "./objects/nav";
-@import "./objects/images";
-@import "./objects/form";
-@import "./objects/femaleTitle";
+@import "./objects/button";
 
 /* Components */
-@import "./components/two-column";
+@import "./components/line";
+@import "./components/wrapper";
+@import "./components/advantages";
+@import "./components/call";
+@import "./components/aboutUs";
+@import "./components/wwd";
 @import "./components/services";
+@import "./components/ourWork";
+@import "./components/news";
+@import "./components/industrial";
+@import "./components/nav";
 @import "./components/slider";
-@import "./components/infobar";
-@import "./components/two-column-noImg";
+@import "./components/aboutInfo";
+@import "./components/ourMission";
+@import "./components/gallery";
 
 /* Font awesome */
 @import "./utilities/fontawesome-pro/css/all.min.css";
+
+/* owl-carousel */
+@import "./utilities/owl-carousel/owl.carousel.scss";
+@import "./utilities/owl-carousel/owl.theme.default.scss";

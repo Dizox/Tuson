@@ -1,0 +1,19 @@
+mixin ourWork(data)
+  section.ourWork(style="{background-image: url(../../img/ourWork_background.jpg)}")
+    .wrapper.wrapper_ourWork
+      .ourWork__text= data.beforeTitle
+      .ourWork__container
+        h2.ourWork__title= data.title
+        a.ourWork__itemLink(href="#" rel="nofollow") Show all
+      .line
+      .ourWork__text= data.text
+      .ourWork__list
+        each item in data.items
+          .ourWork__item
+            a.ourWork__img(href="#" rel="nofollow")
+              img(src=`${item.img}`)
+            h3
+              a.ourWork__itemTitle(href="#")= item.title
+            .ourWork__itemText= item.text
+            a.ourWork__itemLink(href="#" rel="nofollow") Read more 
+          

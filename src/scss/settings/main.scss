@@ -1,8 +1,9 @@
 /* Colors */
 $c-white: #fff;
 $c-black: #000;
-$c-text: #212121;
-$c-primary: #148ba5;
+$c-text: #262626;
+$c-button: #c52027;
+$c-primary: #0d0d0d;
 $c-warning: #f4dd2d;
 $c-error: #fa7268;
 $c-purple: #a1787e;
@@ -24,11 +25,13 @@ $default-transition-time: 0.3s;
 $default-transition: all $default-transition-time ease;
 
 /* Media variables */
-$phones:   480px;
-$l-phones: 575px;
-$tablets:  768px;
-$medium:   991px;
-$large:    1199px;
-$x-large:  1439px;
+$u-l-phones:      360px;
+$phones:          480px;
+$big-phones:      600px;
+$tablets:         768px;
+$big-tablets:     920px;
+$medium:          991px;
+$large:           1199px;
+$x-large:         1439px;
 
 $m-retina2x: screen and (min-resolution: 120dpi), screen and (min-resolution: 1.25dppx);

@@ -1,33 +1,47 @@
 footer.footer
-  .container
-    .footer__row
-      .footer__col
-        .footer__left
-          img.footer__logo(src="../img/white-logo.svg")
-          p "You can have anything you want in life as long as you dress for it."
-          p - Edith Head
-        nav.footer__right
-          ul.footer__list
-            li.footer__list-item
-              a.footer__list-link(href="#") about
-            li.footer__list-item
-              a.footer__list-link(href="#") female
-            li.footer__list-item
-              a.footer__list-link(href="#") male
-          ul.footer__list
-            li.footer__list-item
-              a.footer__list-link(href="#") corporate
-            li.footer__list-item
-              a.footer__list-link(href="#") contact
-      .footer__col
-        .footer__socials
-          a.footer__social(href="#")
-            i.fab.fa-instagram
-          a.footer__social(href="#")
-            i.fab.fa-facebook-f
-        div
-          a.footer__mail(href="mailto:Lynn@LantanaStyle.com") Lynn@LantanaStyle.com
-          br
-          span Chicago, Memphis
-        .copyright
-          | © 2019 Lantana Style, Inc.
+  .wrapper
+    .footer__container
+      .footer__column
+        a.footer__logo(href="#")
+          img(src="../../img/footer_logo.png")
+        .footer__info.footer__info_afterTitle Tuson Corporation is a manufacturer of components and assemblies used in industries ranging from industrial to medical.
+      .footer__column
+        a.footer__link(href="#") About Us
+        a.footer__link(href="#") Capabilities
+        a.footer__link(href="#") Projects
+        a.footer__link(href="#") News
+        a.footer__link(href="#") Contact
+        a.footer__link(href="#") Careers
+        a.footer__link(href="#") Privacy Policy
+      .footer__column
+        a.footer__link(href="#") Services
+        a.footer__info(href="#") Machining
+        a.footer__info(href="#") Turning
+        a.footer__info(href="#") DC Motor Assemblies & Components
+        a.footer__info(href="#") Hydraulic & Pneumatic Valves
+        a.footer__info(href="#") Hydraulic Pump & Motors
+        a.footer__info(href="#") Linear Actuators
+      .footer__column
+        .footer__string
+          img.footer__miniLogo(src="../../img/footer_adr.png")
+          .footer__upToDown.footer__upToDown_noUrl
+            .footer__contact Tuson Corporation
+            .footer__contact 475 Bunker Ct.
+            .footer__contact Vernon Hills, IL 60061
+        .footer__string
+          img.footer__miniLogo(src="../../img/footer_phone.png")
+          .footer__upToDown
+            a.footer__contact.footer__contact_margin(href="tel: #") (847) 816-8800 
+            a.footer__contact.footer__contact_margin(href="tel: #") (847) 816-8801
+        .footer__string.footer__string_AdaptiveSup
+          .footer__string
+            img.footer__miniLogo(src="../../img/footer_mail.png")
+            a.footer__contact.footer__contact_margin(href="mailto: #") info@tuson.com
+          .footer__string
+            img.footer__miniLogo(src="../../img/footer_linkedIn.png")
+            a.footer__contact.footer__contact_margin(href="#") linkedin.com
+    .footer__container.footer__container_bottom
+        .footer__copyrights © Tuson Corporation, 2019. All rights reserved.
+        .footer__siteCreators site design 
+            a(href="#").footer__siteCreatorsLink COMRADE
+        

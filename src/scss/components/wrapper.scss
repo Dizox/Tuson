@@ -1,0 +1,20 @@
+.wrapper {
+  width: 1182px;
+  margin: 0px auto;
+  padding: 0px 15px;
+
+  &_services {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-top: 80px;
+    padding-bottom: 120px;
+  }
+
+  @include large {
+    width: 100%;
+    padding-top: 0px;
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+}

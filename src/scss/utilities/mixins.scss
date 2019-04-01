@@ -109,20 +109,32 @@
   }
 }
 
+@mixin big-tablets() {
+  @media screen and (max-width: $big-tablets) {
+    @content;
+  }
+}
+
 @mixin tablets() {
   @media screen and (max-width: $tablets) {
     @content;
   }
 }
 
-@mixin l-phones() {
-  @media screen and (max-width: $l-phones) {
+@mixin big-phones() {
+  @media screen and (max-width: $big-phones) {
     @content;
   }
 }
 
 @mixin phones() {
   @media screen and (max-width: $phones) {
+    @content;
+  }
+}
+
+@mixin u-l-phones() {
+  @media screen and (max-width: $u-l-phones) {
     @content;
   }
 }

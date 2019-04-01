@@ -1,0 +1,7 @@
+mixin underHeader(data)
+  section.underHeader
+    h1.header__title= data.title Continuous improvement processes, people, parts 
+    if (data.line)
+      .line
+    .header__text= data.text Cost effective custom machined hydraulic and electric assemblies and components.
+    +button({name: "Request a quote"})

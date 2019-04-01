@@ -1,0 +1,46 @@
+.nav-toggle {
+  position: absolute;
+  right: 7%;
+  top: 54%;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  transform: translate(-50%, -50%);
+
+  &:focus {
+    outline-width: 0;
+  }
+
+  & [class*='bar-'] {
+    background: black;
+    display: block;
+    transform: rotate(0deg);
+    transition: .2s ease all;
+    border-radius: 2px;
+    height: 2px;
+    width: 25px;
+    margin-bottom: 4px;
+  }
+
+  &-toggle .bar-bot {
+    margin-bottom: 0;
+  }
+
+  @include u-l-phones {
+    right: 2%;
+  }
+}
+
+.opened .bar-top {
+  transform: rotate(45deg);
+  transform-origin: 15% 15%;
+}
+
+.opened .bar-mid {
+  opacity: 0;
+}
+
+.opened .bar-bot {
+  transform: rotate(-45deg);
+  transform-origin: 15% 95%;
+}

@@ -1,0 +1,13 @@
+.button {
+  background-color: $c-button;
+  padding: 10px 18px;
+  color: $c-white;
+  text-transform: uppercase;
+  display: inline-block;
+
+  &:hover {
+    background-color: $c-white;
+    outline: 1px solid $c-button;
+    color: $c-button;
+  }
+}

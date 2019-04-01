@@ -1,0 +1,15 @@
+mixin news(data)
+  section.news
+    .wrapper
+      h2.news__title= data.title
+      .line
+      .news__list
+        each item in data.items
+          .news__item
+            a.news__itemImg(href="#" rel="nofollow")
+              img(src=`${item.img}`)
+            h3 
+              a.news__itemTitle(href="#")= item.title
+            .news__itemText= item.text
+            a.news__itemLink(href="#" rel="nofollow") Read more
+            

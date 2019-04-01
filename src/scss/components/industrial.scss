@@ -1,0 +1,59 @@
+.industrial{
+  margin-bottom: 100px;
+
+  &__text{
+    color: $c-text;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+
+  &__title{
+    color: $c-text;
+    font-family: "RobotoCondensed";
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 42px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+
+  &__container{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+
+    @include medium {
+      flex-direction: column-reverse;
+      text-align: center;
+    }
+  }
+
+  &__column{
+    width: 20%;
+
+    @include medium {
+      width: 100%;
+    }
+  }
+
+  &__flexColumn{
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+
+    @include medium {
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+  }
+
+  @include medium {
+    margin-bottom: 50px;
+  }
+
+  &__item {
+    margin-right: 20px;
+  }
+}

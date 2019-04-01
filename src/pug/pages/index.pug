@@ -1,0 +1,203 @@
+extends ../layout/base
+
+block page-title
+  title Tuson
+
+block page-content
+  -
+    var dataAdvantages = {
+        items: [
+          {
+            img: "../../img/emerald.png", 
+            title: "Completed Projects", 
+            text: "Our portfolio of projects ranges from tiny individual shafts to DC motors to complex hydraulic valves and systems."
+          },
+          {
+            img: "../../img/laurel.png", 
+            title: "Superior Quality", 
+            text: "Quality is of utmost importance at Tuson. We are ISO 9001 certified and in the process of getting IATF 16949 certified"
+          },
+          {
+            img: "../../img/prize.png", 
+            title: "Continuous Improvement", 
+            text: "We are always researching and implementing the latest technology and equipment for our facilities"
+          } 
+        ]
+    }
+    
+  -
+    var dataCall = {
+      title: "Let us help you with a cost effective solution to your project. Call our sales team or fill in the form for a quick quote.",
+      info: "We’re ready to talk about your specifications, lead time and  pricing.",
+      number: "(847) 816-8800",
+      link: "Request quote"
+    }
+    
+  -
+    var dataAboutUs = {
+      beforeTitle: "Learn about",
+      title: "Tuson",
+      text: [
+          "Tuson Corporation is a well-established company that is always looking for new partners sharing our vision of growth. We provide parts and products to the Agricultural, Construction, Automotive and Transportation, Aerospace, and recently 3D printing industries.",
+          "Tuson Corporation is a global company manufacturing in the Pacific Rim. Tuson is always striving to improve processes and capabilities to provide superior service and high quality products at competitive prices. "
+      ],
+      link: "Learn more"
+    }
+    
+  -
+    var dataWwd = {
+      beforeTitle: "What We DO",
+      title: "MANUFACTURE FOR THE WORLD",
+      items: [
+        {
+          title: "Global Capacity", 
+          text: "Several wholly owned Manufacturing locations in the Pacific Rim and USA."
+        },
+        {
+          title: "MACHINING AND ASSEMBLY", 
+          text: "With over 100 machines and 200,000 sq.ft. split between our facilities, we have the capability to finish high quality, complex parts at high quantities as well as assemble."
+        },
+        {
+          title: "ISO Certified", 
+          text: "We maintain global standards of excellence. Need specific certifications for your project? No problem."
+        },
+        {
+          title: "USA Facility", 
+          text: "Cost savings from products overseas without long lead times after initial ramp up."
+        },
+        {
+          title: "Just in Time", 
+          text: "On average, 99% on time delivery on thousands of part numbers."
+        },
+        {
+          title: "Supply Chain Management", 
+          text: "Advanced logistical concepts Kanban, vendor managed inventory, EDI, consignment."
+        }
+      ]
+    }
+    
+  -
+    var dataServices = {
+      title: "Our services",
+      items: [
+        {
+          img: "../../img/services_itemBack1.jpg", 
+          text: "Machining"
+        },
+        {
+          img: "../../img/services_itemBack2.jpg",
+          text: "TURNING"
+        },
+        {
+          img: "../../img/services_itemBack3.jpg",
+          text: "DC MOTOR ASSEMBLIES & COMPONENTS"
+        },
+        {
+          img: "../../img/services_itemBack4.jpg",
+          text: "HYDRAULIC & PNEUMATIC VALVES"
+        },
+        {
+          img: "../../img/services_itemBack5.jpg",
+          text: "HYDRAULIC PUMP & MOTORS"
+        } 
+      ]
+    }      
+  
+  -
+    var dataOurWork = {
+      beforeTitle: "Our Work",
+      title: "Examples",
+      items: [
+        {
+          title: "Turning & Grinding", 
+          text: "XT ABS Shaft",
+          img: "../../img/ourWork1.jpg"
+        },
+        {
+          title: "Custom Machined", 
+          text: "Engine End Cap Assembly",
+          img: "../../img/ourWork2.jpg"
+        },
+        {
+          title: "Fabrication & Machining", 
+          text: "Electric Motors",
+          img: "../../img/ourWork3.jpg"
+        },
+        {
+          title: "Turning & Grinding", 
+          text: "Hydraulic Pump Drive Gear",
+          img: "../../img/ourWork4.jpg"
+        }
+      ]
+    }     
+    
+  -
+    var dataNews = {
+      title: "Last news",
+      items: [
+        {
+          title: "News title", 
+          text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip…",
+          img: "../../img/news_1.jpg"
+        },
+        {
+          title: "News title", 
+          text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip…",
+          img: "../../img/news_2.jpg"
+        },
+        {
+          title: "News title", 
+          text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip…",
+          img: "../../img/news_3.jpg"
+        }
+      ]
+    }
+    
+  -  
+    var dataIndustrial = {
+      beforeTitle: "Industrial",
+      title: "OEM parts",
+      text: [
+          "ISO 9001:2008",
+          "TS 16949",
+          "Certified"
+      ],
+      img: [
+          "../../img/spons1.png",
+          "../../img/spons2.png",
+          "../../img/spons3.png",
+          "../../img/spons4.png",
+          "../../img/spons5.png"
+      ]
+    }    
+     
+  -  
+    var dataSlider = {
+      beforeTitle: "In Their Own Words",
+      title: "Testimonials",
+      items: [
+        {
+          quote: "Tuson’s staff was able to take our rough drawing and transform it into a high-quality part. Not only that, their manufacturing facility was able to produce 20,000 parts and ship them to our facility 55 days later!", 
+          author: "– David Yardley, Automobile Lighting Component Manufacturer"
+        },
+        {
+          quote: "Tuson’s staff was able to take our rough drawing and transform it into a high-quality part. Not only that, their manufacturing facility was able to produce 20,000 parts and ship them to our facility 55 days later!", 
+          author: "– David Yardley, Automobile Lighting Component Manufacturer"
+        },
+        {
+          quote: "Tuson’s staff was able to take our rough drawing and transform it into a high-quality part. Not only that, their manufacturing facility was able to produce 20,000 parts and ship them to our facility 55 days later!", 
+          author: "– David Yardley, Automobile Lighting Component Manufacturer"
+        }
+      ]
+    }     
+
+  main.main-content
+    +advantages(dataAdvantages)
+    +services(dataServices)
+    +call(dataCall)
+    +aboutUs(dataAboutUs)
+    +wwd(dataWwd)
+    +ourWork(dataOurWork)
+    +slider(dataSlider)
+    +news(dataNews)
+    +industrial(dataIndustrial)

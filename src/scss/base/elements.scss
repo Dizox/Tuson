@@ -6,6 +6,7 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  font-family: "Work Sans";
 }
 /* stylelint-enable selector-max-universal */
 
@@ -36,15 +37,20 @@ textarea {
   max-width: 100%;
 }
 
-img {
-  height: auto;
-}
-
 textarea {
   resize: none;
+}
+
+button {
+  outline: none;
 }
 
 button,
 input[type="submit"] {
   cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  color: $c-white;
 }

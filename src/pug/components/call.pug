@@ -1,0 +1,10 @@
+mixin call(data)
+  section.call
+    .wrapper.call__content
+      .call__column
+        .call__title= data.title 
+        .line.line_call
+        .call__info= data.info 
+      .call__column.call__column_right
+        a.call__number(href=`${data.number}`)= data.number 
+        +button({name: data.link})

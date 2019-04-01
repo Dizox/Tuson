@@ -1,149 +1,209 @@
 .footer {
+  width: 100%;
   background-color: $c-primary;
-  padding: 100px 0;
-  border-bottom: 8px solid $c-warning;
+  padding-top: 50px;
+  padding-bottom: 37px;
 
-  @include tablets {
-    padding: 60px 0;
-  }
-
-  p {
-    color: #fff;
-    font-weight: 700;
-  }
-
-  &__row {
+  &__container {
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
+
+    &_bottom {
+      margin-top: 70px;
+    }
+
+    @include big-tablets {
+      flex-wrap: wrap;
+    }
+
+    @include tablets {
+      margin-top: 0px;
+    }
+
+    @include big-phones {
+      &_bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
   }
 
-  &__col {
+  &__column {
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 210px;
 
-    &:first-child {
-      width: calc(60% - 15px);
-      display: flex;
-      justify-content: space-between;
+    &_mini-margin {
+      margin-top: 15px;
+    }
 
-      @include medium {
+    &_noSB {
+      justify-content: flex-start;
+    }
+
+    &:nth-child(3) > .footer__info:hover {
+      text-decoration: underline;
+    }
+
+    @include big-tablets {
+      &:nth-child(4) {
         width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 40px;
       }
     }
 
-    &:last-child {
-      width: calc(40% - 15px);
-      flex-direction: column;
-      align-items: flex-end;
-      padding-top: 30px;
-      justify-content: space-between;
+    @include tablets {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 20px;
 
-      @include medium {
-        width: 100%;
-        flex-direction: row;
+      &:first-child {
         align-items: center;
-        padding-top: 70px;
       }
+    }
 
-      @include tablets {
-        padding-top: 20px;
+    @include big-phones {
+      &:nth-child(4){
+        flex-direction: column;
       }
+    }
+  }
 
-      @include tablets {
-        div:nth-child(2) {
-          font-size: 14px;
-          text-align: right;
-        }
-      }
+  &__info {
+    width: max-content;
+    max-width: 100%;
+    color: $c-white;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.6px;
+    line-height: 24px;
+    opacity: 0.5;
+    margin-top: 10px;
+
+    @include tablets {
+      margin: 5px auto;
+    }
+  }
+
+  &__link {
+    width: max-content;
+    max-width: 100%;
+    color: $c-white;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: uppercase;
+
+    &:hover {
+      box-shadow: 0 1px 0px 0px $c-white;
+    }
+
+    @include tablets {
+      margin: 5px auto;
     }
   }
 
   &__logo {
-    margin-bottom: 35px;
-  }
-
-  &__left {
-    text-align: center;
-    width: calc(50% - 70px);
+    width: 200px;
+    height: 51px;
+    margin-bottom: 42px;
 
     @include tablets {
-      width: 100%;
+      margin-left: 0px;
+      margin-right: 0px;
     }
   }
 
-  &__right {
-    display: flex;
-    padding-top: 30px;
-
-    @include tablets {
-      width: 100%;
-      justify-content: space-between;
-      max-width: 400px;
-      margin: 0 auto;
-    }
+  &__copyrights {
+    color: $c-white;
+    font-size: 14px;
+    font-weight: 400;
   }
 
-  &__list {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-
-    &:first-child {
-      margin-right: 100px;
-
-      @include tablets {
-        margin-right: 0;
-      }
-    }
-
-    &-link {
-      @include link-underline;
-      text-decoration: none;
-      font-size: 14px;
-      text-transform: uppercase;
-      color: #fff;
-      letter-spacing: 2.63px;
-      margin-bottom: 35px;
-      display: inline-block;
-      font-weight: 700;
-    }
+  &__siteCreators,
+  &__container > span {
+    opacity: 0.5;
+    color: $c-white;
+    font-size: 14px;
+    font-weight: 400;
   }
 
-  &__social {
-    font-size: 24px;
-    color: #fff;
-
-    &:first-child {
-      margin-right: 30px;
-
-      @include tablets {
-        margin-right: 20px;
-      }
-    }
+  &__siteCreators > span {
+    font-weight: 700;
   }
 
-  &__mail {
-    color: #fff;
-    text-decoration: none;
+  &__contact {
+    color: $c-white;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+
+    &_margin {
+      margin-bottom: 12px;
+    }
 
     &:hover {
-      color: darken(#fff, 15%);
+      box-shadow: 0 1px 0px 0px $c-white;
     }
   }
 
-  span {
-    color: #fff;
+  &__miniLogo {
+    width: 20px;
+    height: 20px;
+    margin-right: 14px;
   }
 
-  .copyright {
-    opacity: 0.7;
-    color: #fff;
+  &__string {
+    display: flex;
 
-    @include tablets {
-      margin-top: 40px;
-      width: 100%;
-      text-align: center;
+    &_AdaptiveSup {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @include big-tablets {
+      width: 30%;
+
+      &_AdaptiveSup {
+        width: 26%;
+      }
+    }
+
+    @include big-phones {
+      width: 180px;
+      margin: 0px auto;
+
+      &:nth-child(4){
+        flex-direction: column;
+      }
+    }
+  }
+
+  &__string:nth-child(1) &__upToDown {
+    margin-bottom: 50px;
+  }
+
+  &__upToDown {
+    display: flex;
+    flex-direction: column;
+
+    &_noUrl > div:hover {
+      box-shadow: none !important;
+    }
+
+    @include big-phones {
+      text-align: left;
+      margin-bottom: 15px !important;
+    }
+  }
+
+  &__siteCreatorsLink{
+    font-weight: 700;
+
+    &:hover{
+      box-shadow: 0 1px 0px 0px $c-white;
     }
   }
 }

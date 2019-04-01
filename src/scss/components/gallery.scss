@@ -1,0 +1,67 @@
+.gallery {
+  padding-top: 67px;
+  padding-bottom: 78px;
+
+  &__title {
+    padding-bottom: 32px;
+    color: $c-text;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 42px;
+    text-transform: uppercase;
+  }
+
+  &__list {
+    margin-top: 55px;
+    display: flex;
+    flex-wrap: wrap;
+
+    @include medium {
+      justify-content: space-between;
+    }
+  }
+
+  &__item {
+    width: 32%;
+    height: 240px;
+    margin: 0px 1.5% 40px 0px;
+    margin-bottom: 40px;
+    background: url("../img/gallery__item_1.jpg") no-repeat center/cover;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &:nth-child(3n+3) {
+      margin-right: 0px;
+    }
+
+    @include medium {
+      width: 48%;
+      margin-right: 0px;
+    }
+
+    @include big-phones {
+      width: 363px;
+      margin-left: auto;
+      margin-right: auto !important;
+    }
+  }
+
+  &__link {
+    color: $c-button;
+    font-family: "LucidaGrande";
+    font-size: 16px;
+    line-height: 24px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    @include big-phones {
+      display: table;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
