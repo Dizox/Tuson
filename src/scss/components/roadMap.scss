@@ -1,0 +1,125 @@
+.roadMap{
+  width: 100%;
+  background: url("../img/roadMap_background.jpg") no-repeat center/cover;
+  padding-top: 69px;
+  padding-bottom: 100px;
+
+  &__title {
+    color: $c-white;
+    font-family: "Roboto Condensed";
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 42px;
+    text-transform: uppercase;
+    margin-bottom: 31px;
+  }
+
+  &__map {
+    margin-top: 90px;
+  }
+
+  &__item {
+    width: 50.57%;
+    height: 261px;
+    background: url("../img/roadMap_circleLine.png") no-repeat right;
+
+    &_right {
+      background-position: left;
+      margin-left: auto;
+      padding-left: 74px;
+    }
+  }
+
+  &__mapDate {
+    width: max-content;
+    color: $c-white;
+    font-family: Roboto;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 42px;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+
+  &__mapInfo {
+    width: 90%;
+    max-width: 505px;
+    color: $c-white;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    font-family: "LucidaGrande";
+  }
+
+  @media screen and (max-width: 1444px) {
+    .roadMap__item {
+      width: 50.6%
+    }
+  }
+
+  @media screen and (max-width: 1200px) {
+    .roadMap__item{
+      width: 50.61%
+    }
+  }
+
+  @media screen and (max-width: 1050px) {
+    .roadMap__item{
+        width: 50.7%
+    }
+  }
+
+  @media screen and (max-width: 950px) {
+    .roadMap__item{
+      width: 50.77%;
+    }
+  }
+
+  @media screen and (max-width: 850px) {
+    .roadMap__item{
+      width: 50.9%;
+    }
+  }
+
+  @media screen and (max-width: 780px) {
+    .roadMap__item {
+      width: 100%;
+      background-position: left;
+      padding-left: 74px;
+    }
+
+    .roadMap__map {
+      margin-top: 50px;
+    }
+  }
+
+  @include tablets {
+    padding-top: 40px;
+    padding-bottom: 40px;
+
+    &__mapInfo {
+      max-width: none;
+    }
+  }
+
+  @media screen and (max-width: 540px) {
+    .roadMap__mapDate {
+      font-size: 36px;
+    }
+
+    .roadMap__mapInfo {
+      font-size: 14px;
+    }
+  }
+
+  @media screen and (max-width: 470px) {
+    .roadMap__mapInfo {
+      width: 100%;
+      font-size: 12px;
+    }
+
+    .roadMap__item {
+      padding-left: 30px;
+    }
+  }
+}

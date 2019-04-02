@@ -4,9 +4,10 @@ mixin gallery(data)
       h2.gallery__title= data.title
       .line
       .gallery__list
-          a.gallery__item(href="#" rel="nofollow" style="{background-image: url(../../img/gallery__item_1.jpg)}")
-          a.gallery__item(href="#" rel="nofollow" style="{background-image: url(../../img/gallery__item_1.jpg)}")
-          a.gallery__item(href="#" rel="nofollow" style="{background-image: url(../../img/gallery__item_1.jpg)}")
-          a.gallery__item(href="#" rel="nofollow" style="{background-image: url(../../img/gallery__item_1.jpg)}")
-          a.gallery__item(href="#" rel="nofollow" style="{background-image: url(../../img/gallery__item_1.jpg)}")
+        each item in data.items
+          a.gallery__item(href=`${item}` rel="nofollow" style="background-image: url("+item+");")
+          //a.gallery__item(href="./assets/gallery__item_2.jpg" rel="nofollow" style="background-image: url(./assets/gallery__item_2.jpg)")
+          //a.gallery__item(href="./assets/gallery__item_3.jpg" rel="nofollow" style="background-image: url(./assets/gallery__item_3.jpg)")
+          //a.gallery__item(href="./assets/gallery__item_4.jpg" rel="nofollow" style="background-image: url(./assets/gallery__item_4.jpg)")
+          //a.gallery__item(href="./assets/gallery__item_5.jpg" rel="nofollow" style="background-image: url(./assets/gallery__item_5.jpg)")
       a.gallery__link(href="#" rel="nofollow") Load More

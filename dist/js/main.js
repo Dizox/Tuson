@@ -39,7 +39,7 @@ module.exports = __webpack_require__(4) ? function (object, key, value) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var anObject = __webpack_require__(10);
-var IE8_DOM_DEFINE = __webpack_require__(27);
+var IE8_DOM_DEFINE = __webpack_require__(28);
 var toPrimitive = __webpack_require__(14);
 var dP = Object.defineProperty;
 
@@ -71,7 +71,7 @@ module.exports = !__webpack_require__(9)(function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 // to indexed object, toObject with fallback for non-array-like ES3 strings
-var IObject = __webpack_require__(48);
+var IObject = __webpack_require__(49);
 var defined = __webpack_require__(15);
 module.exports = function (it) {
   return IObject(defined(it));
@@ -167,7 +167,7 @@ module.exports = function (key) {
 
 var global = __webpack_require__(0);
 var core = __webpack_require__(7);
-var ctx = __webpack_require__(46);
+var ctx = __webpack_require__(47);
 var hide = __webpack_require__(2);
 var PROTOTYPE = 'prototype';
 
@@ -321,7 +321,7 @@ module.exports = {};
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys = __webpack_require__(32);
+var $keys = __webpack_require__(33);
 var enumBugKeys = __webpack_require__(19);
 
 module.exports = Object.keys || function keys(O) {
@@ -373,238 +373,6 @@ exports.f = {}.propertyIsEnumerable;
 
 /***/ }),
 /* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = !__webpack_require__(4) && !__webpack_require__(9)(function () {
-  return Object.defineProperty(__webpack_require__(28)('div'), 'a', { get: function () { return 7; } }).a != 7;
-});
-
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isObject = __webpack_require__(8);
-var document = __webpack_require__(0).document;
-// typeof document.createElement is 'object' in old IE
-var is = isObject(document) && isObject(document.createElement);
-module.exports = function (it) {
-  return is ? document.createElement(it) : {};
-};
-
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-var toIObject = __webpack_require__(5);
-var gOPN = __webpack_require__(31).f;
-var toString = {}.toString;
-
-var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
-  ? Object.getOwnPropertyNames(window) : [];
-
-var getWindowNames = function (it) {
-  try {
-    return gOPN(it);
-  } catch (e) {
-    return windowNames.slice();
-  }
-};
-
-module.exports.f = function getOwnPropertyNames(it) {
-  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
-};
-
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports) {
-
-var toString = {}.toString;
-
-module.exports = function (it) {
-  return toString.call(it).slice(8, -1);
-};
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-var $keys = __webpack_require__(32);
-var hiddenKeys = __webpack_require__(19).concat('length', 'prototype');
-
-exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
-  return $keys(O, hiddenKeys);
-};
-
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var has = __webpack_require__(1);
-var toIObject = __webpack_require__(5);
-var arrayIndexOf = __webpack_require__(49)(false);
-var IE_PROTO = __webpack_require__(17)('IE_PROTO');
-
-module.exports = function (object, names) {
-  var O = toIObject(object);
-  var i = 0;
-  var result = [];
-  var key;
-  for (key in O) if (key != IE_PROTO) has(O, key) && result.push(key);
-  // Don't enum bug & hidden keys
-  while (names.length > i) if (has(O, key = names[i++])) {
-    ~arrayIndexOf(result, key) || result.push(key);
-  }
-  return result;
-};
-
-
-/***/ }),
-/* 33 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var LIBRARY = __webpack_require__(20);
-var $export = __webpack_require__(13);
-var redefine = __webpack_require__(34);
-var hide = __webpack_require__(2);
-var has = __webpack_require__(1);
-var Iterators = __webpack_require__(21);
-var $iterCreate = __webpack_require__(57);
-var setToStringTag = __webpack_require__(23);
-var getPrototypeOf = __webpack_require__(60);
-var ITERATOR = __webpack_require__(6)('iterator');
-var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
-var FF_ITERATOR = '@@iterator';
-var KEYS = 'keys';
-var VALUES = 'values';
-
-var returnThis = function () { return this; };
-
-module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
-  $iterCreate(Constructor, NAME, next);
-  var getMethod = function (kind) {
-    if (!BUGGY && kind in proto) return proto[kind];
-    switch (kind) {
-      case KEYS: return function keys() { return new Constructor(this, kind); };
-      case VALUES: return function values() { return new Constructor(this, kind); };
-    } return function entries() { return new Constructor(this, kind); };
-  };
-  var TAG = NAME + ' Iterator';
-  var DEF_VALUES = DEFAULT == VALUES;
-  var VALUES_BUG = false;
-  var proto = Base.prototype;
-  var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
-  var $default = (!BUGGY && $native) || getMethod(DEFAULT);
-  var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
-  var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
-  var methods, key, IteratorPrototype;
-  // Fix native
-  if ($anyNative) {
-    IteratorPrototype = getPrototypeOf($anyNative.call(new Base()));
-    if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
-      // Set @@toStringTag to native iterators
-      setToStringTag(IteratorPrototype, TAG, true);
-      // fix for some old engines
-      if (!LIBRARY && !has(IteratorPrototype, ITERATOR)) hide(IteratorPrototype, ITERATOR, returnThis);
-    }
-  }
-  // fix Array#{values, @@iterator}.name in V8 / FF
-  if (DEF_VALUES && $native && $native.name !== VALUES) {
-    VALUES_BUG = true;
-    $default = function values() { return $native.call(this); };
-  }
-  // Define iterator
-  if ((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])) {
-    hide(proto, ITERATOR, $default);
-  }
-  // Plug for library
-  Iterators[NAME] = $default;
-  Iterators[TAG] = returnThis;
-  if (DEFAULT) {
-    methods = {
-      values: DEF_VALUES ? $default : getMethod(VALUES),
-      keys: IS_SET ? $default : getMethod(KEYS),
-      entries: $entries
-    };
-    if (FORCED) for (key in methods) {
-      if (!(key in proto)) redefine(proto, key, methods[key]);
-    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
-  }
-  return methods;
-};
-
-
-/***/ }),
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(2);
-
-
-/***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-var anObject = __webpack_require__(10);
-var dPs = __webpack_require__(58);
-var enumBugKeys = __webpack_require__(19);
-var IE_PROTO = __webpack_require__(17)('IE_PROTO');
-var Empty = function () { /* empty */ };
-var PROTOTYPE = 'prototype';
-
-// Create object with fake `null` prototype: use iframe Object with cleared prototype
-var createDict = function () {
-  // Thrash, waste and sodomy: IE GC bug
-  var iframe = __webpack_require__(28)('iframe');
-  var i = enumBugKeys.length;
-  var lt = '<';
-  var gt = '>';
-  var iframeDocument;
-  iframe.style.display = 'none';
-  __webpack_require__(59).appendChild(iframe);
-  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
-  // createDict = iframe.contentWindow.Object;
-  // html.removeChild(iframe);
-  iframeDocument = iframe.contentWindow.document;
-  iframeDocument.open();
-  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
-  iframeDocument.close();
-  createDict = iframeDocument.F;
-  while (i--) delete createDict[PROTOTYPE][enumBugKeys[i]];
-  return createDict();
-};
-
-module.exports = Object.create || function create(O, Properties) {
-  var result;
-  if (O !== null) {
-    Empty[PROTOTYPE] = anObject(O);
-    result = new Empty();
-    Empty[PROTOTYPE] = null;
-    // add "__proto__" for Object.getPrototypeOf polyfill
-    result[IE_PROTO] = O;
-  } else result = createDict();
-  return Properties === undefined ? result : dPs(result, Properties);
-};
-
-
-/***/ }),
-/* 36 */
-/***/ (function(module, exports) {
-
-exports.f = Object.getOwnPropertySymbols;
-
-
-/***/ }),
-/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10975,19 +10743,280 @@ return jQuery;
 
 
 /***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = !__webpack_require__(4) && !__webpack_require__(9)(function () {
+  return Object.defineProperty(__webpack_require__(29)('div'), 'a', { get: function () { return 7; } }).a != 7;
+});
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(8);
+var document = __webpack_require__(0).document;
+// typeof document.createElement is 'object' in old IE
+var is = isObject(document) && isObject(document.createElement);
+module.exports = function (it) {
+  return is ? document.createElement(it) : {};
+};
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
+var toIObject = __webpack_require__(5);
+var gOPN = __webpack_require__(32).f;
+var toString = {}.toString;
+
+var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
+  ? Object.getOwnPropertyNames(window) : [];
+
+var getWindowNames = function (it) {
+  try {
+    return gOPN(it);
+  } catch (e) {
+    return windowNames.slice();
+  }
+};
+
+module.exports.f = function getOwnPropertyNames(it) {
+  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
+};
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports) {
+
+var toString = {}.toString;
+
+module.exports = function (it) {
+  return toString.call(it).slice(8, -1);
+};
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
+var $keys = __webpack_require__(33);
+var hiddenKeys = __webpack_require__(19).concat('length', 'prototype');
+
+exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
+  return $keys(O, hiddenKeys);
+};
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var has = __webpack_require__(1);
+var toIObject = __webpack_require__(5);
+var arrayIndexOf = __webpack_require__(50)(false);
+var IE_PROTO = __webpack_require__(17)('IE_PROTO');
+
+module.exports = function (object, names) {
+  var O = toIObject(object);
+  var i = 0;
+  var result = [];
+  var key;
+  for (key in O) if (key != IE_PROTO) has(O, key) && result.push(key);
+  // Don't enum bug & hidden keys
+  while (names.length > i) if (has(O, key = names[i++])) {
+    ~arrayIndexOf(result, key) || result.push(key);
+  }
+  return result;
+};
+
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _iterator = __webpack_require__(53);
+
+var _iterator2 = _interopRequireDefault(_iterator);
+
+var _symbol = __webpack_require__(66);
+
+var _symbol2 = _interopRequireDefault(_symbol);
+
+var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
+  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
+} : function (obj) {
+  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+};
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var LIBRARY = __webpack_require__(20);
+var $export = __webpack_require__(13);
+var redefine = __webpack_require__(36);
+var hide = __webpack_require__(2);
+var has = __webpack_require__(1);
+var Iterators = __webpack_require__(21);
+var $iterCreate = __webpack_require__(57);
+var setToStringTag = __webpack_require__(23);
+var getPrototypeOf = __webpack_require__(60);
+var ITERATOR = __webpack_require__(6)('iterator');
+var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
+var FF_ITERATOR = '@@iterator';
+var KEYS = 'keys';
+var VALUES = 'values';
+
+var returnThis = function () { return this; };
+
+module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
+  $iterCreate(Constructor, NAME, next);
+  var getMethod = function (kind) {
+    if (!BUGGY && kind in proto) return proto[kind];
+    switch (kind) {
+      case KEYS: return function keys() { return new Constructor(this, kind); };
+      case VALUES: return function values() { return new Constructor(this, kind); };
+    } return function entries() { return new Constructor(this, kind); };
+  };
+  var TAG = NAME + ' Iterator';
+  var DEF_VALUES = DEFAULT == VALUES;
+  var VALUES_BUG = false;
+  var proto = Base.prototype;
+  var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
+  var $default = (!BUGGY && $native) || getMethod(DEFAULT);
+  var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
+  var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
+  var methods, key, IteratorPrototype;
+  // Fix native
+  if ($anyNative) {
+    IteratorPrototype = getPrototypeOf($anyNative.call(new Base()));
+    if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
+      // Set @@toStringTag to native iterators
+      setToStringTag(IteratorPrototype, TAG, true);
+      // fix for some old engines
+      if (!LIBRARY && !has(IteratorPrototype, ITERATOR)) hide(IteratorPrototype, ITERATOR, returnThis);
+    }
+  }
+  // fix Array#{values, @@iterator}.name in V8 / FF
+  if (DEF_VALUES && $native && $native.name !== VALUES) {
+    VALUES_BUG = true;
+    $default = function values() { return $native.call(this); };
+  }
+  // Define iterator
+  if ((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])) {
+    hide(proto, ITERATOR, $default);
+  }
+  // Plug for library
+  Iterators[NAME] = $default;
+  Iterators[TAG] = returnThis;
+  if (DEFAULT) {
+    methods = {
+      values: DEF_VALUES ? $default : getMethod(VALUES),
+      keys: IS_SET ? $default : getMethod(KEYS),
+      entries: $entries
+    };
+    if (FORCED) for (key in methods) {
+      if (!(key in proto)) redefine(proto, key, methods[key]);
+    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
+  }
+  return methods;
+};
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(2);
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+var anObject = __webpack_require__(10);
+var dPs = __webpack_require__(58);
+var enumBugKeys = __webpack_require__(19);
+var IE_PROTO = __webpack_require__(17)('IE_PROTO');
+var Empty = function () { /* empty */ };
+var PROTOTYPE = 'prototype';
+
+// Create object with fake `null` prototype: use iframe Object with cleared prototype
+var createDict = function () {
+  // Thrash, waste and sodomy: IE GC bug
+  var iframe = __webpack_require__(29)('iframe');
+  var i = enumBugKeys.length;
+  var lt = '<';
+  var gt = '>';
+  var iframeDocument;
+  iframe.style.display = 'none';
+  __webpack_require__(59).appendChild(iframe);
+  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
+  // createDict = iframe.contentWindow.Object;
+  // html.removeChild(iframe);
+  iframeDocument = iframe.contentWindow.document;
+  iframeDocument.open();
+  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
+  iframeDocument.close();
+  createDict = iframeDocument.F;
+  while (i--) delete createDict[PROTOTYPE][enumBugKeys[i]];
+  return createDict();
+};
+
+module.exports = Object.create || function create(O, Properties) {
+  var result;
+  if (O !== null) {
+    Empty[PROTOTYPE] = anObject(O);
+    result = new Empty();
+    Empty[PROTOTYPE] = null;
+    // add "__proto__" for Object.getPrototypeOf polyfill
+    result[IE_PROTO] = O;
+  } else result = createDict();
+  return Properties === undefined ? result : dPs(result, Properties);
+};
+
+
+/***/ }),
 /* 38 */
+/***/ (function(module, exports) {
+
+exports.f = Object.getOwnPropertySymbols;
+
+
+/***/ }),
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fonts_main_css__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fonts_main_css__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fonts_main_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__fonts_main_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scss_main_scss__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scss_main_scss__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scss_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__scss_main_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__js_modules_slider__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__js_modules_slider__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__js_modules_slider___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__js_modules_slider__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__js_main__ = __webpack_require__(76);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__js_main___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__js_main__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__js_modules_gallery__ = __webpack_require__(76);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__js_modules_gallery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__js_modules_gallery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__js_main__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__js_main___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__js_main__);
 /* Vendor */
 
 /* Fonts */
@@ -11001,11 +11030,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-/***/ }),
-/* 39 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ }),
 /* 40 */
@@ -11015,10 +11039,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 /* 41 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _getOwnPropertyNames = __webpack_require__(42);var _getOwnPropertyNames2 = _interopRequireDefault(_getOwnPropertyNames);var _typeof2 = __webpack_require__(52);var _typeof3 = _interopRequireDefault(_typeof2);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} /**
+var _getOwnPropertyNames = __webpack_require__(43);var _getOwnPropertyNames2 = _interopRequireDefault(_getOwnPropertyNames);var _typeof2 = __webpack_require__(34);var _typeof3 = _interopRequireDefault(_typeof2);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} /**
                                                                                                                                                                                                                                                                                                                                                                                       * Owl Carousel v2.3.4
                                                                                                                                                                                                                                                                                                                                                                                       * Copyright 2013-2018 David Deutsch
                                                                                                                                                                                                                                                                                                                                                                                       * Licensed under: SEE LICENSE IN https://github.com/OwlCarousel2/OwlCarousel2/blob/master/LICENSE
@@ -11037,7 +11067,7 @@ var _getOwnPropertyNames = __webpack_require__(42);var _getOwnPropertyNames2 = _
                                                                                                                                                                                                                                                                                                                                                                                           */
 ;
 
-window.$ = window.jQuery = __webpack_require__(37);
+window.$ = window.jQuery = __webpack_require__(27);
 
 (function ($, window, document, undefined) {
 
@@ -14472,16 +14502,16 @@ window.$ = window.jQuery = __webpack_require__(37);
 })(window.Zepto || window.jQuery, window, document);
 
 /***/ }),
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(43), __esModule: true };
-
-/***/ }),
 /* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(44);
+module.exports = { "default": __webpack_require__(44), __esModule: true };
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(45);
 var $Object = __webpack_require__(7).Object;
 module.exports = function getOwnPropertyNames(it) {
   return $Object.getOwnPropertyNames(it);
@@ -14489,17 +14519,17 @@ module.exports = function getOwnPropertyNames(it) {
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.7 Object.getOwnPropertyNames(O)
-__webpack_require__(45)('getOwnPropertyNames', function () {
-  return __webpack_require__(29).f;
+__webpack_require__(46)('getOwnPropertyNames', function () {
+  return __webpack_require__(30).f;
 });
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // most Object methods by ES6 should accept primitives
@@ -14515,11 +14545,11 @@ module.exports = function (KEY, exec) {
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // optional / simple context binding
-var aFunction = __webpack_require__(47);
+var aFunction = __webpack_require__(48);
 module.exports = function (fn, that, length) {
   aFunction(fn);
   if (that === undefined) return fn;
@@ -14541,7 +14571,7 @@ module.exports = function (fn, that, length) {
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports) {
 
 module.exports = function (it) {
@@ -14551,11 +14581,11 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
-var cof = __webpack_require__(30);
+var cof = __webpack_require__(31);
 // eslint-disable-next-line no-prototype-builtins
 module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
   return cof(it) == 'String' ? it.split('') : Object(it);
@@ -14563,14 +14593,14 @@ module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // false -> Array#indexOf
 // true  -> Array#includes
 var toIObject = __webpack_require__(5);
-var toLength = __webpack_require__(50);
-var toAbsoluteIndex = __webpack_require__(51);
+var toLength = __webpack_require__(51);
+var toAbsoluteIndex = __webpack_require__(52);
 module.exports = function (IS_INCLUDES) {
   return function ($this, el, fromIndex) {
     var O = toIObject($this);
@@ -14592,7 +14622,7 @@ module.exports = function (IS_INCLUDES) {
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.15 ToLength
@@ -14604,7 +14634,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var toInteger = __webpack_require__(16);
@@ -14615,33 +14645,6 @@ module.exports = function (index, length) {
   return index < 0 ? max(index + length, 0) : min(index, length);
 };
 
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _iterator = __webpack_require__(53);
-
-var _iterator2 = _interopRequireDefault(_iterator);
-
-var _symbol = __webpack_require__(66);
-
-var _symbol2 = _interopRequireDefault(_symbol);
-
-var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
-  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
-} : function (obj) {
-  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
-};
 
 /***/ }),
 /* 53 */
@@ -14667,7 +14670,7 @@ module.exports = __webpack_require__(24).f('iterator');
 var $at = __webpack_require__(56)(true);
 
 // 21.1.3.27 String.prototype[@@iterator]()
-__webpack_require__(33)(String, 'String', function (iterated) {
+__webpack_require__(35)(String, 'String', function (iterated) {
   this._t = String(iterated); // target
   this._i = 0;                // next index
 // 21.1.5.2.1 %StringIteratorPrototype%.next()
@@ -14711,7 +14714,7 @@ module.exports = function (TO_STRING) {
 
 "use strict";
 
-var create = __webpack_require__(35);
+var create = __webpack_require__(37);
 var descriptor = __webpack_require__(11);
 var setToStringTag = __webpack_require__(23);
 var IteratorPrototype = {};
@@ -14822,7 +14825,7 @@ var toIObject = __webpack_require__(5);
 // 22.1.3.13 Array.prototype.keys()
 // 22.1.3.29 Array.prototype.values()
 // 22.1.3.30 Array.prototype[@@iterator]()
-module.exports = __webpack_require__(33)(Array, 'Array', function (iterated, kind) {
+module.exports = __webpack_require__(35)(Array, 'Array', function (iterated, kind) {
   this._t = toIObject(iterated); // target
   this._i = 0;                   // next index
   this._k = kind;                // kind
@@ -14892,7 +14895,7 @@ var global = __webpack_require__(0);
 var has = __webpack_require__(1);
 var DESCRIPTORS = __webpack_require__(4);
 var $export = __webpack_require__(13);
-var redefine = __webpack_require__(34);
+var redefine = __webpack_require__(36);
 var META = __webpack_require__(69).KEY;
 var $fails = __webpack_require__(9);
 var shared = __webpack_require__(18);
@@ -14908,8 +14911,8 @@ var isObject = __webpack_require__(8);
 var toIObject = __webpack_require__(5);
 var toPrimitive = __webpack_require__(14);
 var createDesc = __webpack_require__(11);
-var _create = __webpack_require__(35);
-var gOPNExt = __webpack_require__(29);
+var _create = __webpack_require__(37);
+var gOPNExt = __webpack_require__(30);
 var $GOPD = __webpack_require__(72);
 var $DP = __webpack_require__(3);
 var $keys = __webpack_require__(22);
@@ -15035,9 +15038,9 @@ if (!USE_NATIVE) {
 
   $GOPD.f = $getOwnPropertyDescriptor;
   $DP.f = $defineProperty;
-  __webpack_require__(31).f = gOPNExt.f = $getOwnPropertyNames;
+  __webpack_require__(32).f = gOPNExt.f = $getOwnPropertyNames;
   __webpack_require__(26).f = $propertyIsEnumerable;
-  __webpack_require__(36).f = $getOwnPropertySymbols;
+  __webpack_require__(38).f = $getOwnPropertySymbols;
 
   if (DESCRIPTORS && !__webpack_require__(20)) {
     redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
@@ -15187,7 +15190,7 @@ var meta = module.exports = {
 
 // all enumerable object keys, includes symbols
 var getKeys = __webpack_require__(22);
-var gOPS = __webpack_require__(36);
+var gOPS = __webpack_require__(38);
 var pIE = __webpack_require__(26);
 module.exports = function (it) {
   var result = getKeys(it);
@@ -15207,7 +15210,7 @@ module.exports = function (it) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.2.2 IsArray(argument)
-var cof = __webpack_require__(30);
+var cof = __webpack_require__(31);
 module.exports = Array.isArray || function isArray(arg) {
   return cof(arg) == 'Array';
 };
@@ -15222,7 +15225,7 @@ var createDesc = __webpack_require__(11);
 var toIObject = __webpack_require__(5);
 var toPrimitive = __webpack_require__(14);
 var has = __webpack_require__(1);
-var IE8_DOM_DEFINE = __webpack_require__(27);
+var IE8_DOM_DEFINE = __webpack_require__(28);
 var gOPD = Object.getOwnPropertyDescriptor;
 
 exports.f = __webpack_require__(4) ? gOPD : function getOwnPropertyDescriptor(O, P) {
@@ -15260,46 +15263,1744 @@ __webpack_require__(25)('observable');
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _jquery = __webpack_require__(37);var _jquery2 = _interopRequireDefault(_jquery);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var _typeof2 = __webpack_require__(34);var _typeof3 = _interopRequireDefault(_typeof2);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} /*! Magnific Popup - v1.1.0 - 2016-02-20
+                                                                                                                                                                                                                  * http://dimsemenov.com/plugins/magnific-popup/
+                                                                                                                                                                                                                  * Copyright (c) 2016 Dmitry Semenov; */
+;(function (factory) {
+	if (true) {
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(27)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else if ((typeof exports === 'undefined' ? 'undefined' : (0, _typeof3.default)(exports)) === 'object') {
+		// Node/CommonJS
+		factory(require('jquery'));
+	} else {
+		// Browser globals
+		factory(window.jQuery || window.Zepto);
+	}
+})(function ($) {
+
+	/*>>core*/
+	/**
+             *
+             * Magnific Popup Core JS file
+             *
+             */
+
+
+	/**
+                 * Private static constants
+                 */
+	var CLOSE_EVENT = 'Close',
+	BEFORE_CLOSE_EVENT = 'BeforeClose',
+	AFTER_CLOSE_EVENT = 'AfterClose',
+	BEFORE_APPEND_EVENT = 'BeforeAppend',
+	MARKUP_PARSE_EVENT = 'MarkupParse',
+	OPEN_EVENT = 'Open',
+	CHANGE_EVENT = 'Change',
+	NS = 'mfp',
+	EVENT_NS = '.' + NS,
+	READY_CLASS = 'mfp-ready',
+	REMOVING_CLASS = 'mfp-removing',
+	PREVENT_CLOSE_CLASS = 'mfp-prevent-close';
+
+
+	/**
+                                             * Private vars
+                                             */
+	/*jshint -W079 */
+	var mfp, // As we have only one instance of MagnificPopup object, we define it locally to not to use 'this'
+	MagnificPopup = function MagnificPopup() {},
+	_isJQ = !!window.jQuery,
+	_prevStatus,
+	_window = $(window),
+	_document,
+	_prevContentType,
+	_wrapClasses,
+	_currPopupType;
+
+
+	/**
+                  * Private functions
+                  */
+	var _mfpOn = function _mfpOn(name, f) {
+		mfp.ev.on(NS + name + EVENT_NS, f);
+	},
+	_getEl = function _getEl(className, appendTo, html, raw) {
+		var el = document.createElement('div');
+		el.className = 'mfp-' + className;
+		if (html) {
+			el.innerHTML = html;
+		}
+		if (!raw) {
+			el = $(el);
+			if (appendTo) {
+				el.appendTo(appendTo);
+			}
+		} else if (appendTo) {
+			appendTo.appendChild(el);
+		}
+		return el;
+	},
+	_mfpTrigger = function _mfpTrigger(e, data) {
+		mfp.ev.triggerHandler(NS + e, data);
+
+		if (mfp.st.callbacks) {
+			// converts "mfpEventName" to "eventName" callback and triggers it if it's present
+			e = e.charAt(0).toLowerCase() + e.slice(1);
+			if (mfp.st.callbacks[e]) {
+				mfp.st.callbacks[e].apply(mfp, $.isArray(data) ? data : [data]);
+			}
+		}
+	},
+	_getCloseBtn = function _getCloseBtn(type) {
+		if (type !== _currPopupType || !mfp.currTemplate.closeBtn) {
+			mfp.currTemplate.closeBtn = $(mfp.st.closeMarkup.replace('%title%', mfp.st.tClose));
+			_currPopupType = type;
+		}
+		return mfp.currTemplate.closeBtn;
+	},
+	// Initialize Magnific Popup only when called at least once
+	_checkInstance = function _checkInstance() {
+		if (!$.magnificPopup.instance) {
+			/*jshint -W020 */
+			mfp = new MagnificPopup();
+			mfp.init();
+			$.magnificPopup.instance = mfp;
+		}
+	},
+	// CSS transition detection, http://stackoverflow.com/questions/7264899/detect-css-transitions-using-javascript-and-without-modernizr
+	supportsTransitions = function supportsTransitions() {
+		var s = document.createElement('p').style, // 's' for style. better to create an element if body yet to exist
+		v = ['ms', 'O', 'Moz', 'Webkit']; // 'v' for vendor
+
+		if (s['transition'] !== undefined) {
+			return true;
+		}
+
+		while (v.length) {
+			if (v.pop() + 'Transition' in s) {
+				return true;
+			}
+		}
+
+		return false;
+	};
+
+
+
+	/**
+     * Public functions
+     */
+	MagnificPopup.prototype = {
+
+		constructor: MagnificPopup,
+
+		/**
+                               * Initializes Magnific Popup plugin.
+                               * This function is triggered only once when $.fn.magnificPopup or $.magnificPopup is executed
+                               */
+		init: function init() {
+			var appVersion = navigator.appVersion;
+			mfp.isLowIE = mfp.isIE8 = document.all && !document.addEventListener;
+			mfp.isAndroid = /android/gi.test(appVersion);
+			mfp.isIOS = /iphone|ipad|ipod/gi.test(appVersion);
+			mfp.supportsTransition = supportsTransitions();
+
+			// We disable fixed positioned lightbox on devices that don't handle it nicely.
+			// If you know a better way of detecting this - let me know.
+			mfp.probablyMobile = mfp.isAndroid || mfp.isIOS || /(Opera Mini)|Kindle|webOS|BlackBerry|(Opera Mobi)|(Windows Phone)|IEMobile/i.test(navigator.userAgent);
+			_document = $(document);
+
+			mfp.popupsCache = {};
+		},
+
+		/**
+      * Opens popup
+      * @param  data [description]
+      */
+		open: function open(data) {
+
+			var i;
+
+			if (data.isObj === false) {
+				// convert jQuery collection to array to avoid conflicts later
+				mfp.items = data.items.toArray();
+
+				mfp.index = 0;
+				var items = data.items,
+				item;
+				for (i = 0; i < items.length; i++) {
+					item = items[i];
+					if (item.parsed) {
+						item = item.el[0];
+					}
+					if (item === data.el[0]) {
+						mfp.index = i;
+						break;
+					}
+				}
+			} else {
+				mfp.items = $.isArray(data.items) ? data.items : [data.items];
+				mfp.index = data.index || 0;
+			}
+
+			// if popup is already opened - we just update the content
+			if (mfp.isOpen) {
+				mfp.updateItemHTML();
+				return;
+			}
+
+			mfp.types = [];
+			_wrapClasses = '';
+			if (data.mainEl && data.mainEl.length) {
+				mfp.ev = data.mainEl.eq(0);
+			} else {
+				mfp.ev = _document;
+			}
+
+			if (data.key) {
+				if (!mfp.popupsCache[data.key]) {
+					mfp.popupsCache[data.key] = {};
+				}
+				mfp.currTemplate = mfp.popupsCache[data.key];
+			} else {
+				mfp.currTemplate = {};
+			}
+
+
+
+			mfp.st = $.extend(true, {}, $.magnificPopup.defaults, data);
+			mfp.fixedContentPos = mfp.st.fixedContentPos === 'auto' ? !mfp.probablyMobile : mfp.st.fixedContentPos;
+
+			if (mfp.st.modal) {
+				mfp.st.closeOnContentClick = false;
+				mfp.st.closeOnBgClick = false;
+				mfp.st.showCloseBtn = false;
+				mfp.st.enableEscapeKey = false;
+			}
+
+
+			// Building markup
+			// main containers are created only once
+			if (!mfp.bgOverlay) {
+
+				// Dark overlay
+				mfp.bgOverlay = _getEl('bg').on('click' + EVENT_NS, function () {
+					mfp.close();
+				});
+
+				mfp.wrap = _getEl('wrap').attr('tabindex', -1).on('click' + EVENT_NS, function (e) {
+					if (mfp._checkIfClose(e.target)) {
+						mfp.close();
+					}
+				});
+
+				mfp.container = _getEl('container', mfp.wrap);
+			}
+
+			mfp.contentContainer = _getEl('content');
+			if (mfp.st.preloader) {
+				mfp.preloader = _getEl('preloader', mfp.container, mfp.st.tLoading);
+			}
+
+
+			// Initializing modules
+			var modules = $.magnificPopup.modules;
+			for (i = 0; i < modules.length; i++) {
+				var n = modules[i];
+				n = n.charAt(0).toUpperCase() + n.slice(1);
+				mfp['init' + n].call(mfp);
+			}
+			_mfpTrigger('BeforeOpen');
+
+
+			if (mfp.st.showCloseBtn) {
+				// Close button
+				if (!mfp.st.closeBtnInside) {
+					mfp.wrap.append(_getCloseBtn());
+				} else {
+					_mfpOn(MARKUP_PARSE_EVENT, function (e, template, values, item) {
+						values.close_replaceWith = _getCloseBtn(item.type);
+					});
+					_wrapClasses += ' mfp-close-btn-in';
+				}
+			}
+
+			if (mfp.st.alignTop) {
+				_wrapClasses += ' mfp-align-top';
+			}
+
+
+
+			if (mfp.fixedContentPos) {
+				mfp.wrap.css({
+					overflow: mfp.st.overflowY,
+					overflowX: 'hidden',
+					overflowY: mfp.st.overflowY });
+
+			} else {
+				mfp.wrap.css({
+					top: _window.scrollTop(),
+					position: 'absolute' });
+
+			}
+			if (mfp.st.fixedBgPos === false || mfp.st.fixedBgPos === 'auto' && !mfp.fixedContentPos) {
+				mfp.bgOverlay.css({
+					height: _document.height(),
+					position: 'absolute' });
+
+			}
+
+
+
+			if (mfp.st.enableEscapeKey) {
+				// Close on ESC key
+				_document.on('keyup' + EVENT_NS, function (e) {
+					if (e.keyCode === 27) {
+						mfp.close();
+					}
+				});
+			}
+
+			_window.on('resize' + EVENT_NS, function () {
+				mfp.updateSize();
+			});
+
+
+			if (!mfp.st.closeOnContentClick) {
+				_wrapClasses += ' mfp-auto-cursor';
+			}
+
+			if (_wrapClasses)
+			mfp.wrap.addClass(_wrapClasses);
+
+
+			// this triggers recalculation of layout, so we get it once to not to trigger twice
+			var windowHeight = mfp.wH = _window.height();
+
+
+			var windowStyles = {};
+
+			if (mfp.fixedContentPos) {
+				if (mfp._hasScrollBar(windowHeight)) {
+					var s = mfp._getScrollbarSize();
+					if (s) {
+						windowStyles.marginRight = s;
+					}
+				}
+			}
+
+			if (mfp.fixedContentPos) {
+				if (!mfp.isIE7) {
+					windowStyles.overflow = 'hidden';
+				} else {
+					// ie7 double-scroll bug
+					$('body, html').css('overflow', 'hidden');
+				}
+			}
+
+
+
+			var classesToadd = mfp.st.mainClass;
+			if (mfp.isIE7) {
+				classesToadd += ' mfp-ie7';
+			}
+			if (classesToadd) {
+				mfp._addClassToMFP(classesToadd);
+			}
+
+			// add content
+			mfp.updateItemHTML();
+
+			_mfpTrigger('BuildControls');
+
+			// remove scrollbar, add margin e.t.c
+			$('html').css(windowStyles);
+
+			// add everything to DOM
+			mfp.bgOverlay.add(mfp.wrap).prependTo(mfp.st.prependTo || $(document.body));
+
+			// Save last focused element
+			mfp._lastFocusedEl = document.activeElement;
+
+			// Wait for next cycle to allow CSS transition
+			setTimeout(function () {
+
+				if (mfp.content) {
+					mfp._addClassToMFP(READY_CLASS);
+					mfp._setFocus();
+				} else {
+					// if content is not defined (not loaded e.t.c) we add class only for BG
+					mfp.bgOverlay.addClass(READY_CLASS);
+				}
+
+				// Trap the focus in popup
+				_document.on('focusin' + EVENT_NS, mfp._onFocusIn);
+
+			}, 16);
+
+			mfp.isOpen = true;
+			mfp.updateSize(windowHeight);
+			_mfpTrigger(OPEN_EVENT);
+
+			return data;
+		},
+
+		/**
+      * Closes the popup
+      */
+		close: function close() {
+			if (!mfp.isOpen) return;
+			_mfpTrigger(BEFORE_CLOSE_EVENT);
+
+			mfp.isOpen = false;
+			// for CSS3 animation
+			if (mfp.st.removalDelay && !mfp.isLowIE && mfp.supportsTransition) {
+				mfp._addClassToMFP(REMOVING_CLASS);
+				setTimeout(function () {
+					mfp._close();
+				}, mfp.st.removalDelay);
+			} else {
+				mfp._close();
+			}
+		},
+
+		/**
+      * Helper for close() function
+      */
+		_close: function _close() {
+			_mfpTrigger(CLOSE_EVENT);
+
+			var classesToRemove = REMOVING_CLASS + ' ' + READY_CLASS + ' ';
+
+			mfp.bgOverlay.detach();
+			mfp.wrap.detach();
+			mfp.container.empty();
+
+			if (mfp.st.mainClass) {
+				classesToRemove += mfp.st.mainClass + ' ';
+			}
+
+			mfp._removeClassFromMFP(classesToRemove);
+
+			if (mfp.fixedContentPos) {
+				var windowStyles = { marginRight: '' };
+				if (mfp.isIE7) {
+					$('body, html').css('overflow', '');
+				} else {
+					windowStyles.overflow = '';
+				}
+				$('html').css(windowStyles);
+			}
+
+			_document.off('keyup' + EVENT_NS + ' focusin' + EVENT_NS);
+			mfp.ev.off(EVENT_NS);
+
+			// clean up DOM elements that aren't removed
+			mfp.wrap.attr('class', 'mfp-wrap').removeAttr('style');
+			mfp.bgOverlay.attr('class', 'mfp-bg');
+			mfp.container.attr('class', 'mfp-container');
+
+			// remove close button from target element
+			if (mfp.st.showCloseBtn && (
+			!mfp.st.closeBtnInside || mfp.currTemplate[mfp.currItem.type] === true)) {
+				if (mfp.currTemplate.closeBtn)
+				mfp.currTemplate.closeBtn.detach();
+			}
+
+
+			if (mfp.st.autoFocusLast && mfp._lastFocusedEl) {
+				$(mfp._lastFocusedEl).focus(); // put tab focus back
+			}
+			mfp.currItem = null;
+			mfp.content = null;
+			mfp.currTemplate = null;
+			mfp.prevHeight = 0;
+
+			_mfpTrigger(AFTER_CLOSE_EVENT);
+		},
+
+		updateSize: function updateSize(winHeight) {
+
+			if (mfp.isIOS) {
+				// fixes iOS nav bars https://github.com/dimsemenov/Magnific-Popup/issues/2
+				var zoomLevel = document.documentElement.clientWidth / window.innerWidth;
+				var height = window.innerHeight * zoomLevel;
+				mfp.wrap.css('height', height);
+				mfp.wH = height;
+			} else {
+				mfp.wH = winHeight || _window.height();
+			}
+			// Fixes #84: popup incorrectly positioned with position:relative on body
+			if (!mfp.fixedContentPos) {
+				mfp.wrap.css('height', mfp.wH);
+			}
+
+			_mfpTrigger('Resize');
+
+		},
+
+		/**
+      * Set content of popup based on current index
+      */
+		updateItemHTML: function updateItemHTML() {
+			var item = mfp.items[mfp.index];
+
+			// Detach and perform modifications
+			mfp.contentContainer.detach();
+
+			if (mfp.content)
+			mfp.content.detach();
+
+			if (!item.parsed) {
+				item = mfp.parseEl(mfp.index);
+			}
+
+			var type = item.type;
+
+			_mfpTrigger('BeforeChange', [mfp.currItem ? mfp.currItem.type : '', type]);
+			// BeforeChange event works like so:
+			// _mfpOn('BeforeChange', function(e, prevType, newType) { });
+
+			mfp.currItem = item;
+
+			if (!mfp.currTemplate[type]) {
+				var markup = mfp.st[type] ? mfp.st[type].markup : false;
+
+				// allows to modify markup
+				_mfpTrigger('FirstMarkupParse', markup);
+
+				if (markup) {
+					mfp.currTemplate[type] = $(markup);
+				} else {
+					// if there is no markup found we just define that template is parsed
+					mfp.currTemplate[type] = true;
+				}
+			}
+
+			if (_prevContentType && _prevContentType !== item.type) {
+				mfp.container.removeClass('mfp-' + _prevContentType + '-holder');
+			}
+
+			var newContent = mfp['get' + type.charAt(0).toUpperCase() + type.slice(1)](item, mfp.currTemplate[type]);
+			mfp.appendContent(newContent, type);
+
+			item.preloaded = true;
+
+			_mfpTrigger(CHANGE_EVENT, item);
+			_prevContentType = item.type;
+
+			// Append container back after its content changed
+			mfp.container.prepend(mfp.contentContainer);
+
+			_mfpTrigger('AfterChange');
+		},
+
+
+		/**
+      * Set HTML content of popup
+      */
+		appendContent: function appendContent(newContent, type) {
+			mfp.content = newContent;
+
+			if (newContent) {
+				if (mfp.st.showCloseBtn && mfp.st.closeBtnInside &&
+				mfp.currTemplate[type] === true) {
+					// if there is no markup, we just append close button element inside
+					if (!mfp.content.find('.mfp-close').length) {
+						mfp.content.append(_getCloseBtn());
+					}
+				} else {
+					mfp.content = newContent;
+				}
+			} else {
+				mfp.content = '';
+			}
+
+			_mfpTrigger(BEFORE_APPEND_EVENT);
+			mfp.container.addClass('mfp-' + type + '-holder');
+
+			mfp.contentContainer.append(mfp.content);
+		},
+
+
+		/**
+      * Creates Magnific Popup data object based on given data
+      * @param  {int} index Index of item to parse
+      */
+		parseEl: function parseEl(index) {
+			var item = mfp.items[index],
+			type;
+
+			if (item.tagName) {
+				item = { el: $(item) };
+			} else {
+				type = item.type;
+				item = { data: item, src: item.src };
+			}
+
+			if (item.el) {
+				var types = mfp.types;
+
+				// check for 'mfp-TYPE' class
+				for (var i = 0; i < types.length; i++) {
+					if (item.el.hasClass('mfp-' + types[i])) {
+						type = types[i];
+						break;
+					}
+				}
+
+				item.src = item.el.attr('data-mfp-src');
+				if (!item.src) {
+					item.src = item.el.attr('href');
+				}
+			}
+
+			item.type = type || mfp.st.type || 'inline';
+			item.index = index;
+			item.parsed = true;
+			mfp.items[index] = item;
+			_mfpTrigger('ElementParse', item);
+
+			return mfp.items[index];
+		},
+
+
+		/**
+      * Initializes single popup or a group of popups
+      */
+		addGroup: function addGroup(el, options) {
+			var eHandler = function eHandler(e) {
+				e.mfpEl = this;
+				mfp._openClick(e, el, options);
+			};
+
+			if (!options) {
+				options = {};
+			}
+
+			var eName = 'click.magnificPopup';
+			options.mainEl = el;
+
+			if (options.items) {
+				options.isObj = true;
+				el.off(eName).on(eName, eHandler);
+			} else {
+				options.isObj = false;
+				if (options.delegate) {
+					el.off(eName).on(eName, options.delegate, eHandler);
+				} else {
+					options.items = el;
+					el.off(eName).on(eName, eHandler);
+				}
+			}
+		},
+		_openClick: function _openClick(e, el, options) {
+			var midClick = options.midClick !== undefined ? options.midClick : $.magnificPopup.defaults.midClick;
+
+
+			if (!midClick && (e.which === 2 || e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)) {
+				return;
+			}
+
+			var disableOn = options.disableOn !== undefined ? options.disableOn : $.magnificPopup.defaults.disableOn;
+
+			if (disableOn) {
+				if ($.isFunction(disableOn)) {
+					if (!disableOn.call(mfp)) {
+						return true;
+					}
+				} else {// else it's number
+					if (_window.width() < disableOn) {
+						return true;
+					}
+				}
+			}
+
+			if (e.type) {
+				e.preventDefault();
+
+				// This will prevent popup from closing if element is inside and popup is already opened
+				if (mfp.isOpen) {
+					e.stopPropagation();
+				}
+			}
+
+			options.el = $(e.mfpEl);
+			if (options.delegate) {
+				options.items = el.find(options.delegate);
+			}
+			mfp.open(options);
+		},
+
+
+		/**
+      * Updates text on preloader
+      */
+		updateStatus: function updateStatus(status, text) {
+
+			if (mfp.preloader) {
+				if (_prevStatus !== status) {
+					mfp.container.removeClass('mfp-s-' + _prevStatus);
+				}
+
+				if (!text && status === 'loading') {
+					text = mfp.st.tLoading;
+				}
+
+				var data = {
+					status: status,
+					text: text };
+
+				// allows to modify status
+				_mfpTrigger('UpdateStatus', data);
+
+				status = data.status;
+				text = data.text;
+
+				mfp.preloader.html(text);
+
+				mfp.preloader.find('a').on('click', function (e) {
+					e.stopImmediatePropagation();
+				});
+
+				mfp.container.addClass('mfp-s-' + status);
+				_prevStatus = status;
+			}
+		},
+
+
+		/*
+     	"Private" helpers that aren't private at all
+      */
+		// Check to close popup or not
+		// "target" is an element that was clicked
+		_checkIfClose: function _checkIfClose(target) {
+
+			if ($(target).hasClass(PREVENT_CLOSE_CLASS)) {
+				return;
+			}
+
+			var closeOnContent = mfp.st.closeOnContentClick;
+			var closeOnBg = mfp.st.closeOnBgClick;
+
+			if (closeOnContent && closeOnBg) {
+				return true;
+			} else {
+
+				// We close the popup if click is on close button or on preloader. Or if there is no content.
+				if (!mfp.content || $(target).hasClass('mfp-close') || mfp.preloader && target === mfp.preloader[0]) {
+					return true;
+				}
+
+				// if click is outside the content
+				if (target !== mfp.content[0] && !$.contains(mfp.content[0], target)) {
+					if (closeOnBg) {
+						// last check, if the clicked element is in DOM, (in case it's removed onclick)
+						if ($.contains(document, target)) {
+							return true;
+						}
+					}
+				} else if (closeOnContent) {
+					return true;
+				}
+
+			}
+			return false;
+		},
+		_addClassToMFP: function _addClassToMFP(cName) {
+			mfp.bgOverlay.addClass(cName);
+			mfp.wrap.addClass(cName);
+		},
+		_removeClassFromMFP: function _removeClassFromMFP(cName) {
+			this.bgOverlay.removeClass(cName);
+			mfp.wrap.removeClass(cName);
+		},
+		_hasScrollBar: function _hasScrollBar(winHeight) {
+			return (mfp.isIE7 ? _document.height() : document.body.scrollHeight) > (winHeight || _window.height());
+		},
+		_setFocus: function _setFocus() {
+			(mfp.st.focus ? mfp.content.find(mfp.st.focus).eq(0) : mfp.wrap).focus();
+		},
+		_onFocusIn: function _onFocusIn(e) {
+			if (e.target !== mfp.wrap[0] && !$.contains(mfp.wrap[0], e.target)) {
+				mfp._setFocus();
+				return false;
+			}
+		},
+		_parseMarkup: function _parseMarkup(template, values, item) {
+			var arr;
+			if (item.data) {
+				values = $.extend(item.data, values);
+			}
+			_mfpTrigger(MARKUP_PARSE_EVENT, [template, values, item]);
+
+			$.each(values, function (key, value) {
+				if (value === undefined || value === false) {
+					return true;
+				}
+				arr = key.split('_');
+				if (arr.length > 1) {
+					var el = template.find(EVENT_NS + '-' + arr[0]);
+
+					if (el.length > 0) {
+						var attr = arr[1];
+						if (attr === 'replaceWith') {
+							if (el[0] !== value[0]) {
+								el.replaceWith(value);
+							}
+						} else if (attr === 'img') {
+							if (el.is('img')) {
+								el.attr('src', value);
+							} else {
+								el.replaceWith($('<img>').attr('src', value).attr('class', el.attr('class')));
+							}
+						} else {
+							el.attr(arr[1], value);
+						}
+					}
+
+				} else {
+					template.find(EVENT_NS + '-' + key).html(value);
+				}
+			});
+		},
+
+		_getScrollbarSize: function _getScrollbarSize() {
+			// thx David
+			if (mfp.scrollbarSize === undefined) {
+				var scrollDiv = document.createElement("div");
+				scrollDiv.style.cssText = 'width: 99px; height: 99px; overflow: scroll; position: absolute; top: -9999px;';
+				document.body.appendChild(scrollDiv);
+				mfp.scrollbarSize = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+				document.body.removeChild(scrollDiv);
+			}
+			return mfp.scrollbarSize;
+		} };
+
+	/* MagnificPopup core prototype end */
+
+
+
+
+	/**
+                                         * Public static functions
+                                         */
+	$.magnificPopup = {
+		instance: null,
+		proto: MagnificPopup.prototype,
+		modules: [],
+
+		open: function open(options, index) {
+			_checkInstance();
+
+			if (!options) {
+				options = {};
+			} else {
+				options = $.extend(true, {}, options);
+			}
+
+			options.isObj = true;
+			options.index = index || 0;
+			return this.instance.open(options);
+		},
+
+		close: function close() {
+			return $.magnificPopup.instance && $.magnificPopup.instance.close();
+		},
+
+		registerModule: function registerModule(name, module) {
+			if (module.options) {
+				$.magnificPopup.defaults[name] = module.options;
+			}
+			$.extend(this.proto, module.proto);
+			this.modules.push(name);
+		},
+
+		defaults: {
+
+			// Info about options is in docs:
+			// http://dimsemenov.com/plugins/magnific-popup/documentation.html#options
+
+			disableOn: 0,
+
+			key: null,
+
+			midClick: false,
+
+			mainClass: '',
+
+			preloader: true,
+
+			focus: '', // CSS selector of input to focus after popup is opened
+
+			closeOnContentClick: false,
+
+			closeOnBgClick: true,
+
+			closeBtnInside: true,
+
+			showCloseBtn: true,
+
+			enableEscapeKey: true,
+
+			modal: false,
+
+			alignTop: false,
+
+			removalDelay: 0,
+
+			prependTo: null,
+
+			fixedContentPos: 'auto',
+
+			fixedBgPos: 'auto',
+
+			overflowY: 'auto',
+
+			closeMarkup: '<button title="%title%" type="button" class="mfp-close">&#215;</button>',
+
+			tClose: 'Close (Esc)',
+
+			tLoading: 'Loading...',
+
+			autoFocusLast: true } };
+
+
+
+
+
+
+	$.fn.magnificPopup = function (options) {
+		_checkInstance();
+
+		var jqEl = $(this);
+
+		// We call some API method of first param is a string
+		if (typeof options === "string") {
+
+			if (options === 'open') {
+				var items,
+				itemOpts = _isJQ ? jqEl.data('magnificPopup') : jqEl[0].magnificPopup,
+				index = parseInt(arguments[1], 10) || 0;
+
+				if (itemOpts.items) {
+					items = itemOpts.items[index];
+				} else {
+					items = jqEl;
+					if (itemOpts.delegate) {
+						items = items.find(itemOpts.delegate);
+					}
+					items = items.eq(index);
+				}
+				mfp._openClick({ mfpEl: items }, jqEl, itemOpts);
+			} else {
+				if (mfp.isOpen)
+				mfp[options].apply(mfp, Array.prototype.slice.call(arguments, 1));
+			}
+
+		} else {
+			// clone options obj
+			options = $.extend(true, {}, options);
+
+			/*
+                                           * As Zepto doesn't support .data() method for objects
+                                           * and it works only in normal browsers
+                                           * we assign "options" object directly to the DOM element. FTW!
+                                           */
+			if (_isJQ) {
+				jqEl.data('magnificPopup', options);
+			} else {
+				jqEl[0].magnificPopup = options;
+			}
+
+			mfp.addGroup(jqEl, options);
+
+		}
+		return jqEl;
+	};
+
+	/*>>core*/
+
+	/*>>inline*/
+
+	var INLINE_NS = 'inline',
+	_hiddenClass,
+	_inlinePlaceholder,
+	_lastInlineElement,
+	_putInlineElementsBack = function _putInlineElementsBack() {
+		if (_lastInlineElement) {
+			_inlinePlaceholder.after(_lastInlineElement.addClass(_hiddenClass)).detach();
+			_lastInlineElement = null;
+		}
+	};
+
+	$.magnificPopup.registerModule(INLINE_NS, {
+		options: {
+			hiddenClass: 'hide', // will be appended with `mfp-` prefix
+			markup: '',
+			tNotFound: 'Content not found' },
+
+		proto: {
+
+			initInline: function initInline() {
+				mfp.types.push(INLINE_NS);
+
+				_mfpOn(CLOSE_EVENT + '.' + INLINE_NS, function () {
+					_putInlineElementsBack();
+				});
+			},
+
+			getInline: function getInline(item, template) {
+
+				_putInlineElementsBack();
+
+				if (item.src) {
+					var inlineSt = mfp.st.inline,
+					el = $(item.src);
+
+					if (el.length) {
+
+						// If target element has parent - we replace it with placeholder and put it back after popup is closed
+						var parent = el[0].parentNode;
+						if (parent && parent.tagName) {
+							if (!_inlinePlaceholder) {
+								_hiddenClass = inlineSt.hiddenClass;
+								_inlinePlaceholder = _getEl(_hiddenClass);
+								_hiddenClass = 'mfp-' + _hiddenClass;
+							}
+							// replace target inline element with placeholder
+							_lastInlineElement = el.after(_inlinePlaceholder).detach().removeClass(_hiddenClass);
+						}
+
+						mfp.updateStatus('ready');
+					} else {
+						mfp.updateStatus('error', inlineSt.tNotFound);
+						el = $('<div>');
+					}
+
+					item.inlineElement = el;
+					return el;
+				}
+
+				mfp.updateStatus('ready');
+				mfp._parseMarkup(template, {}, item);
+				return template;
+			} } });
+
+
+
+	/*>>inline*/
+
+
+
+	/*>>image*/
+	var _imgInterval,
+	_getTitle = function _getTitle(item) {
+		if (item.data && item.data.title !== undefined)
+		return item.data.title;
+
+		var src = mfp.st.image.titleSrc;
+
+		if (src) {
+			if ($.isFunction(src)) {
+				return src.call(mfp, item);
+			} else if (item.el) {
+				return item.el.attr(src) || '';
+			}
+		}
+		return '';
+	};
+
+	$.magnificPopup.registerModule('image', {
+
+		options: {
+			markup: '<div class="mfp-figure">' +
+			'<div class="mfp-close"></div>' +
+			'<figure>' +
+			'<div class="mfp-img"></div>' +
+			'<figcaption>' +
+			'<div class="mfp-bottom-bar">' +
+			'<div class="mfp-title"></div>' +
+			'<div class="mfp-counter"></div>' +
+			'</div>' +
+			'</figcaption>' +
+			'</figure>' +
+			'</div>',
+			cursor: 'mfp-zoom-out-cur',
+			titleSrc: 'title',
+			verticalFit: true,
+			tError: '<a href="%url%">The image</a> could not be loaded.' },
+
+
+		proto: {
+			initImage: function initImage() {
+				var imgSt = mfp.st.image,
+				ns = '.image';
+
+				mfp.types.push('image');
+
+				_mfpOn(OPEN_EVENT + ns, function () {
+					if (mfp.currItem.type === 'image' && imgSt.cursor) {
+						$(document.body).addClass(imgSt.cursor);
+					}
+				});
+
+				_mfpOn(CLOSE_EVENT + ns, function () {
+					if (imgSt.cursor) {
+						$(document.body).removeClass(imgSt.cursor);
+					}
+					_window.off('resize' + EVENT_NS);
+				});
+
+				_mfpOn('Resize' + ns, mfp.resizeImage);
+				if (mfp.isLowIE) {
+					_mfpOn('AfterChange', mfp.resizeImage);
+				}
+			},
+			resizeImage: function resizeImage() {
+				var item = mfp.currItem;
+				if (!item || !item.img) return;
+
+				if (mfp.st.image.verticalFit) {
+					var decr = 0;
+					// fix box-sizing in ie7/8
+					if (mfp.isLowIE) {
+						decr = parseInt(item.img.css('padding-top'), 10) + parseInt(item.img.css('padding-bottom'), 10);
+					}
+					item.img.css('max-height', mfp.wH - decr);
+				}
+			},
+			_onImageHasSize: function _onImageHasSize(item) {
+				if (item.img) {
+
+					item.hasSize = true;
+
+					if (_imgInterval) {
+						clearInterval(_imgInterval);
+					}
+
+					item.isCheckingImgSize = false;
+
+					_mfpTrigger('ImageHasSize', item);
+
+					if (item.imgHidden) {
+						if (mfp.content)
+						mfp.content.removeClass('mfp-loading');
+
+						item.imgHidden = false;
+					}
+
+				}
+			},
+
+			/**
+       * Function that loops until the image has size to display elements that rely on it asap
+       */
+			findImageSize: function findImageSize(item) {
+
+				var counter = 0,
+				img = item.img[0],
+				mfpSetInterval = function mfpSetInterval(delay) {
+
+					if (_imgInterval) {
+						clearInterval(_imgInterval);
+					}
+					// decelerating interval that checks for size of an image
+					_imgInterval = setInterval(function () {
+						if (img.naturalWidth > 0) {
+							mfp._onImageHasSize(item);
+							return;
+						}
+
+						if (counter > 200) {
+							clearInterval(_imgInterval);
+						}
+
+						counter++;
+						if (counter === 3) {
+							mfpSetInterval(10);
+						} else if (counter === 40) {
+							mfpSetInterval(50);
+						} else if (counter === 100) {
+							mfpSetInterval(500);
+						}
+					}, delay);
+				};
+
+				mfpSetInterval(1);
+			},
+
+			getImage: function getImage(item, template) {
+
+				var guard = 0,
+
+				// image load complete handler
+				onLoadComplete = function onLoadComplete() {
+					if (item) {
+						if (item.img[0].complete) {
+							item.img.off('.mfploader');
+
+							if (item === mfp.currItem) {
+								mfp._onImageHasSize(item);
+
+								mfp.updateStatus('ready');
+							}
+
+							item.hasSize = true;
+							item.loaded = true;
+
+							_mfpTrigger('ImageLoadComplete');
+
+						} else
+						{
+							// if image complete check fails 200 times (20 sec), we assume that there was an error.
+							guard++;
+							if (guard < 200) {
+								setTimeout(onLoadComplete, 100);
+							} else {
+								onLoadError();
+							}
+						}
+					}
+				},
+
+				// image error handler
+				onLoadError = function onLoadError() {
+					if (item) {
+						item.img.off('.mfploader');
+						if (item === mfp.currItem) {
+							mfp._onImageHasSize(item);
+							mfp.updateStatus('error', imgSt.tError.replace('%url%', item.src));
+						}
+
+						item.hasSize = true;
+						item.loaded = true;
+						item.loadError = true;
+					}
+				},
+				imgSt = mfp.st.image;
+
+
+				var el = template.find('.mfp-img');
+				if (el.length) {
+					var img = document.createElement('img');
+					img.className = 'mfp-img';
+					if (item.el && item.el.find('img').length) {
+						img.alt = item.el.find('img').attr('alt');
+					}
+					item.img = $(img).on('load.mfploader', onLoadComplete).on('error.mfploader', onLoadError);
+					img.src = item.src;
+
+					// without clone() "error" event is not firing when IMG is replaced by new IMG
+					// TODO: find a way to avoid such cloning
+					if (el.is('img')) {
+						item.img = item.img.clone();
+					}
+
+					img = item.img[0];
+					if (img.naturalWidth > 0) {
+						item.hasSize = true;
+					} else if (!img.width) {
+						item.hasSize = false;
+					}
+				}
+
+				mfp._parseMarkup(template, {
+					title: _getTitle(item),
+					img_replaceWith: item.img },
+				item);
+
+				mfp.resizeImage();
+
+				if (item.hasSize) {
+					if (_imgInterval) clearInterval(_imgInterval);
+
+					if (item.loadError) {
+						template.addClass('mfp-loading');
+						mfp.updateStatus('error', imgSt.tError.replace('%url%', item.src));
+					} else {
+						template.removeClass('mfp-loading');
+						mfp.updateStatus('ready');
+					}
+					return template;
+				}
+
+				mfp.updateStatus('loading');
+				item.loading = true;
+
+				if (!item.hasSize) {
+					item.imgHidden = true;
+					template.addClass('mfp-loading');
+					mfp.findImageSize(item);
+				}
+
+				return template;
+			} } });
+
+
+
+	/*>>image*/
+
+	/*>>zoom*/
+	var hasMozTransform,
+	getHasMozTransform = function getHasMozTransform() {
+		if (hasMozTransform === undefined) {
+			hasMozTransform = document.createElement('p').style.MozTransform !== undefined;
+		}
+		return hasMozTransform;
+	};
+
+	$.magnificPopup.registerModule('zoom', {
+
+		options: {
+			enabled: false,
+			easing: 'ease-in-out',
+			duration: 300,
+			opener: function opener(element) {
+				return element.is('img') ? element : element.find('img');
+			} },
+
+
+		proto: {
+
+			initZoom: function initZoom() {
+				var zoomSt = mfp.st.zoom,
+				ns = '.zoom',
+				image;
+
+				if (!zoomSt.enabled || !mfp.supportsTransition) {
+					return;
+				}
+
+				var duration = zoomSt.duration,
+				getElToAnimate = function getElToAnimate(image) {
+					var newImg = image.clone().removeAttr('style').removeAttr('class').addClass('mfp-animated-image'),
+					transition = 'all ' + zoomSt.duration / 1000 + 's ' + zoomSt.easing,
+					cssObj = {
+						position: 'fixed',
+						zIndex: 9999,
+						left: 0,
+						top: 0,
+						'-webkit-backface-visibility': 'hidden' },
+
+					t = 'transition';
+
+					cssObj['-webkit-' + t] = cssObj['-moz-' + t] = cssObj['-o-' + t] = cssObj[t] = transition;
+
+					newImg.css(cssObj);
+					return newImg;
+				},
+				showMainContent = function showMainContent() {
+					mfp.content.css('visibility', 'visible');
+				},
+				openTimeout,
+				animatedImg;
+
+				_mfpOn('BuildControls' + ns, function () {
+					if (mfp._allowZoom()) {
+
+						clearTimeout(openTimeout);
+						mfp.content.css('visibility', 'hidden');
+
+						// Basically, all code below does is clones existing image, puts in on top of the current one and animated it
+
+						image = mfp._getItemToZoom();
+
+						if (!image) {
+							showMainContent();
+							return;
+						}
+
+						animatedImg = getElToAnimate(image);
+
+						animatedImg.css(mfp._getOffset());
+
+						mfp.wrap.append(animatedImg);
+
+						openTimeout = setTimeout(function () {
+							animatedImg.css(mfp._getOffset(true));
+							openTimeout = setTimeout(function () {
+
+								showMainContent();
+
+								setTimeout(function () {
+									animatedImg.remove();
+									image = animatedImg = null;
+									_mfpTrigger('ZoomAnimationEnded');
+								}, 16); // avoid blink when switching images
+
+							}, duration); // this timeout equals animation duration
+
+						}, 16); // by adding this timeout we avoid short glitch at the beginning of animation
+
+
+						// Lots of timeouts...
+					}
+				});
+				_mfpOn(BEFORE_CLOSE_EVENT + ns, function () {
+					if (mfp._allowZoom()) {
+
+						clearTimeout(openTimeout);
+
+						mfp.st.removalDelay = duration;
+
+						if (!image) {
+							image = mfp._getItemToZoom();
+							if (!image) {
+								return;
+							}
+							animatedImg = getElToAnimate(image);
+						}
+
+						animatedImg.css(mfp._getOffset(true));
+						mfp.wrap.append(animatedImg);
+						mfp.content.css('visibility', 'hidden');
+
+						setTimeout(function () {
+							animatedImg.css(mfp._getOffset());
+						}, 16);
+					}
+
+				});
+
+				_mfpOn(CLOSE_EVENT + ns, function () {
+					if (mfp._allowZoom()) {
+						showMainContent();
+						if (animatedImg) {
+							animatedImg.remove();
+						}
+						image = null;
+					}
+				});
+			},
+
+			_allowZoom: function _allowZoom() {
+				return mfp.currItem.type === 'image';
+			},
+
+			_getItemToZoom: function _getItemToZoom() {
+				if (mfp.currItem.hasSize) {
+					return mfp.currItem.img;
+				} else {
+					return false;
+				}
+			},
+
+			// Get element postion relative to viewport
+			_getOffset: function _getOffset(isLarge) {
+				var el;
+				if (isLarge) {
+					el = mfp.currItem.img;
+				} else {
+					el = mfp.st.zoom.opener(mfp.currItem.el || mfp.currItem);
+				}
+
+				var offset = el.offset();
+				var paddingTop = parseInt(el.css('padding-top'), 10);
+				var paddingBottom = parseInt(el.css('padding-bottom'), 10);
+				offset.top -= $(window).scrollTop() - paddingTop;
+
+
+				/*
+                                                      		Animating left + top + width/height looks glitchy in Firefox, but perfect in Chrome. And vice-versa.
+                                                      		 */
+
+
+				var obj = {
+					width: el.width(),
+					// fix Zepto height+padding issue
+					height: (_isJQ ? el.innerHeight() : el[0].offsetHeight) - paddingBottom - paddingTop };
+
+
+				// I hate to do this, but there is no another option
+				if (getHasMozTransform()) {
+					obj['-moz-transform'] = obj['transform'] = 'translate(' + offset.left + 'px,' + offset.top + 'px)';
+				} else {
+					obj.left = offset.left;
+					obj.top = offset.top;
+				}
+				return obj;
+			} } });
+
+
+
+
+
+
+	/*>>zoom*/
+
+
+
+	/*>>gallery*/
+	/**
+                * Get looped index depending on number of slides
+                */
+	var _getLoopedId = function _getLoopedId(index) {
+		var numSlides = mfp.items.length;
+		if (index > numSlides - 1) {
+			return index - numSlides;
+		} else if (index < 0) {
+			return numSlides + index;
+		}
+		return index;
+	},
+	_replaceCurrTotal = function _replaceCurrTotal(text, curr, total) {
+		return text.replace(/%curr%/gi, curr + 1).replace(/%total%/gi, total);
+	};
+
+	$.magnificPopup.registerModule('gallery', {
+
+		options: {
+			enabled: false,
+			arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>',
+			preload: [0, 2],
+			navigateByImgClick: true,
+			arrows: true,
+
+			tPrev: 'Previous (Left arrow key)',
+			tNext: 'Next (Right arrow key)',
+			tCounter: '%curr% of %total%' },
+
+
+		proto: {
+			initGallery: function initGallery() {
+
+				var gSt = mfp.st.gallery,
+				ns = '.mfp-gallery';
+
+				mfp.direction = true; // true - next, false - prev
+
+				if (!gSt || !gSt.enabled) return false;
+
+				_wrapClasses += ' mfp-gallery';
+
+				_mfpOn(OPEN_EVENT + ns, function () {
+
+					if (gSt.navigateByImgClick) {
+						mfp.wrap.on('click' + ns, '.mfp-img', function () {
+							if (mfp.items.length > 1) {
+								mfp.next();
+								return false;
+							}
+						});
+					}
+
+					_document.on('keydown' + ns, function (e) {
+						if (e.keyCode === 37) {
+							mfp.prev();
+						} else if (e.keyCode === 39) {
+							mfp.next();
+						}
+					});
+				});
+
+				_mfpOn('UpdateStatus' + ns, function (e, data) {
+					if (data.text) {
+						data.text = _replaceCurrTotal(data.text, mfp.currItem.index, mfp.items.length);
+					}
+				});
+
+				_mfpOn(MARKUP_PARSE_EVENT + ns, function (e, element, values, item) {
+					var l = mfp.items.length;
+					values.counter = l > 1 ? _replaceCurrTotal(gSt.tCounter, item.index, l) : '';
+				});
+
+				_mfpOn('BuildControls' + ns, function () {
+					if (mfp.items.length > 1 && gSt.arrows && !mfp.arrowLeft) {
+						var markup = gSt.arrowMarkup,
+						arrowLeft = mfp.arrowLeft = $(markup.replace(/%title%/gi, gSt.tPrev).replace(/%dir%/gi, 'left')).addClass(PREVENT_CLOSE_CLASS),
+						arrowRight = mfp.arrowRight = $(markup.replace(/%title%/gi, gSt.tNext).replace(/%dir%/gi, 'right')).addClass(PREVENT_CLOSE_CLASS);
+
+						arrowLeft.click(function () {
+							mfp.prev();
+						});
+						arrowRight.click(function () {
+							mfp.next();
+						});
+
+						mfp.container.append(arrowLeft.add(arrowRight));
+					}
+				});
+
+				_mfpOn(CHANGE_EVENT + ns, function () {
+					if (mfp._preloadTimeout) clearTimeout(mfp._preloadTimeout);
+
+					mfp._preloadTimeout = setTimeout(function () {
+						mfp.preloadNearbyImages();
+						mfp._preloadTimeout = null;
+					}, 16);
+				});
+
+
+				_mfpOn(CLOSE_EVENT + ns, function () {
+					_document.off(ns);
+					mfp.wrap.off('click' + ns);
+					mfp.arrowRight = mfp.arrowLeft = null;
+				});
+
+			},
+			next: function next() {
+				mfp.direction = true;
+				mfp.index = _getLoopedId(mfp.index + 1);
+				mfp.updateItemHTML();
+			},
+			prev: function prev() {
+				mfp.direction = false;
+				mfp.index = _getLoopedId(mfp.index - 1);
+				mfp.updateItemHTML();
+			},
+			goTo: function goTo(newIndex) {
+				mfp.direction = newIndex >= mfp.index;
+				mfp.index = newIndex;
+				mfp.updateItemHTML();
+			},
+			preloadNearbyImages: function preloadNearbyImages() {
+				var p = mfp.st.gallery.preload,
+				preloadBefore = Math.min(p[0], mfp.items.length),
+				preloadAfter = Math.min(p[1], mfp.items.length),
+				i;
+
+				for (i = 1; i <= (mfp.direction ? preloadAfter : preloadBefore); i++) {
+					mfp._preloadItem(mfp.index + i);
+				}
+				for (i = 1; i <= (mfp.direction ? preloadBefore : preloadAfter); i++) {
+					mfp._preloadItem(mfp.index - i);
+				}
+			},
+			_preloadItem: function _preloadItem(index) {
+				index = _getLoopedId(index);
+
+				if (mfp.items[index].preloaded) {
+					return;
+				}
+
+				var item = mfp.items[index];
+				if (!item.parsed) {
+					item = mfp.parseEl(index);
+				}
+
+				_mfpTrigger('LazyLoad', item);
+
+				if (item.type === 'image') {
+					item.img = $('<img class="mfp-img" />').on('load.mfploader', function () {
+						item.hasSize = true;
+					}).on('error.mfploader', function () {
+						item.hasSize = true;
+						item.loadError = true;
+						_mfpTrigger('LazyLoadError', item);
+					}).attr('src', item.src);
+				}
+
+
+				item.preloaded = true;
+			} } });
+
+
+
+	/*>>gallery*/
+
+	/*>>retina*/
+
+	var RETINA_NS = 'retina';
+
+	$.magnificPopup.registerModule(RETINA_NS, {
+		options: {
+			replaceSrc: function replaceSrc(item) {
+				return item.src.replace(/\.\w+$/, function (m) {return '@2x' + m;});
+			},
+			ratio: 1 // Function or number.  Set to 1 to disable.
+		},
+		proto: {
+			initRetina: function initRetina() {
+				if (window.devicePixelRatio > 1) {
+
+					var st = mfp.st.retina,
+					ratio = st.ratio;
+
+					ratio = !isNaN(ratio) ? ratio : ratio();
+
+					if (ratio > 1) {
+						_mfpOn('ImageHasSize' + '.' + RETINA_NS, function (e, item) {
+							item.img.css({
+								'max-width': item.img[0].naturalWidth / ratio,
+								'width': '100%' });
+
+						});
+						_mfpOn('ElementParse' + '.' + RETINA_NS, function (e, item) {
+							item.src = st.replaceSrc(item, ratio);
+						});
+					}
+				}
+
+			} } });
+
+
+
+	/*>>retina*/
+	_checkInstance();});
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _jquery = __webpack_require__(27);var _jquery2 = _interopRequireDefault(_jquery);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 
 (0, _jquery2.default)(document).ready(function () {
-    var toggle = document.querySelector('.nav-toggle');
-    var oldHeight;
-    var newHeight;
-    toggle.addEventListener('click', function (e) {
-        this.classList.toggle('opened');
-        (0, _jquery2.default)(".header__column").toggle();
+  var toggle = document.querySelector('.nav-toggle');
+  var oldHeight;
+  var newHeight;
+  toggle.addEventListener('click', function (e) {
+    this.classList.toggle('opened');
+    (0, _jquery2.default)(".header__column").toggle();
+  });
+
+  //slider
+  (0, _jquery2.default)(document).ready(function () {
+    (0, _jquery2.default)(".owl-carousel").owlCarousel({
+      items: 1,
+      nav: true, //nav arrows
+      dots: false,
+      touchDrag: true,
+      mouseDrag: false,
+      loop: true //cycle
     });
 
-    //slider
-    (0, _jquery2.default)(document).ready(function () {
-        (0, _jquery2.default)(".owl-carousel").owlCarousel({
-            items: 1,
-            nav: true, //nav arrows
-            dots: false,
-            touchDrag: true,
-            mouseDrag: false,
-            loop: true //cycle
-        });
+    (0, _jquery2.default)(".owl-prev > span, .owl-next > span").empty();
+  });
 
-        (0, _jquery2.default)(".owl-prev > span, .owl-next > span").empty();
-    });
+  //gallery
+
+  (0, _jquery2.default)('.gallery__list').magnificPopup({
+    delegate: 'a', // child items selector, by clicking on it popup will open
+    type: 'image',
+    // other options
+    gallery: {
+      enabled: true } });
+
+
 });
 
 //sticky header
 (0, _jquery2.default)(document).scroll(function () {
-    var s_top = (0, _jquery2.default)(this).scrollTop();
-    if (s_top > 1) {
-        (0, _jquery2.default)(".header__container").addClass("header__container_sticky");
-        (0, _jquery2.default)(".header__logo").addClass("header__logo_sticky");
-        (0, _jquery2.default)(".header__title").addClass("header__title_sticky");
-    } else {
-        (0, _jquery2.default)(".header__container").removeClass("header__container_sticky");
-        (0, _jquery2.default)(".header__logo").removeClass("header__logo_sticky");
-        (0, _jquery2.default)(".header__title").removeClass("header__title_sticky");
-    }
+  var s_top = (0, _jquery2.default)(this).scrollTop();
+  if (s_top > 300) {
+    (0, _jquery2.default)(".header").addClass("header_sticky");
+    (0, _jquery2.default)(".wrapper_header").addClass("wrapper_sticky");
+    (0, _jquery2.default)(".header__container").addClass("header__container_sticky");
+    (0, _jquery2.default)(".header__logo").addClass("header__logo_sticky");
+  } else {
+    (0, _jquery2.default)(".header").removeClass("header_sticky");
+    (0, _jquery2.default)(".wrapper_header").removeClass("wrapper_sticky");
+    (0, _jquery2.default)(".header__container").removeClass("header__container_sticky");
+    (0, _jquery2.default)(".header__logo").removeClass("header__logo_sticky");
+  }
 });
 
 /***/ })
-],[38]);
+],[39]);
 //# sourceMappingURL=main.js.map

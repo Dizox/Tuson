@@ -42,6 +42,9 @@
   &__list {
     display: flex;
     flex-wrap: wrap;
+    margin: 0px auto;
+    width: max-content;
+    max-width: 100%;
 
     @include medium {
       justify-content: space-between;
@@ -50,23 +53,15 @@
 
   &__item {
     width: 23%;
-    margin-right: 2.5%;
-    margin-top: 60px;
+    margin: 60px auto 0px auto;
     text-align: center;
-
-    &:nth-child(4n+4){
-      margin-right: 0px;
-    }
 
     @include large {
       width: 23%;
-      margin-right: 2.5%;
     }
 
     @include medium {
       width: 30%;
-      margin-right: 0px;
-      margin-top: 60px;
     }
 
     @include tablets {
@@ -79,12 +74,16 @@
   }
 
   &__img {
-    width: 100%;
-    margin-bottom: 36px;
+    width: 262px;
+    max-width: 100%;
+    height: 180px;
+    overflow: hidden;
+    margin: 0px auto 36px auto;
     display: block;
 
-    &:hover {
+    & img:hover {
       transform: scale(1.1);
+      transition: all 1s ease-out;
     }
   }
 
@@ -129,5 +128,9 @@
     &:hover{
       text-decoration: underline;
     }
+  }
+
+  @include tablets {
+    padding: 40px 0px;
   }
 }

@@ -5,6 +5,12 @@ block page-title
 
 block page-content
   -
+    var dataUnderHeader = {
+      title: "ABOUT TUSON CORPORATION",
+      about: "true"
+    }
+
+  -
     var dataAboutInfo = {
       items: [
           "Since 1987, Tuson has manufactured components and assemblies that serve all industries that require products made of metal or use electric motors, hydraulics, and pneumatics.",
@@ -25,10 +31,22 @@ block page-content
     
   -
     var dataGallery = {
-      title: "Gallery"
+      title: "Gallery",
+      items: [
+          "./assets/gallery__item_1.jpg",
+          "./assets/gallery__item_2.jpg",
+          "./assets/gallery__item_3.jpg",
+          "./assets/gallery__item_4.jpg",
+          "./assets/gallery__item_5.jpg"
+      ]
     }
+    
+  -
+    var dataRoadMap = {}
 
   main.main-content
+    +underHeader(dataUnderHeader)
     +aboutInfo(dataAboutInfo)
     +ourMission(dataOurMission)
     +gallery(dataGallery)
+    +roadMap(dataRoadMap)

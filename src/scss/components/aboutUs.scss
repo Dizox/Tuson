@@ -37,9 +37,9 @@
       text-decoration: underline;
     }
   }
-
-  @include big-phones {
-    padding-top: 50px;
-    padding-bottom: 50px;
+  
+  @include tablets {
+    padding-top: 40px;
+    padding-bottom: 40px;
   }
 }

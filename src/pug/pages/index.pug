@@ -5,24 +5,32 @@ block page-title
 
 block page-content
   -
+    var dataUnderHeader = {
+      title: "Continuous improvement processes, people, parts",
+      line: "true",
+      text: "Cost effective custom machined hydraulic and electric assemblies and components.",
+      button: "true"
+    }
+
+  -
     var dataAdvantages = {
-        items: [
-          {
-            img: "../../img/emerald.png", 
-            title: "Completed Projects", 
-            text: "Our portfolio of projects ranges from tiny individual shafts to DC motors to complex hydraulic valves and systems."
-          },
-          {
-            img: "../../img/laurel.png", 
-            title: "Superior Quality", 
-            text: "Quality is of utmost importance at Tuson. We are ISO 9001 certified and in the process of getting IATF 16949 certified"
-          },
-          {
-            img: "../../img/prize.png", 
-            title: "Continuous Improvement", 
-            text: "We are always researching and implementing the latest technology and equipment for our facilities"
-          } 
-        ]
+      items: [
+        {
+          img: "../../img/emerald.png", 
+          title: "Completed Projects", 
+          text: "Our portfolio of projects ranges from tiny individual shafts to DC motors to complex hydraulic valves and systems."
+        },
+        {
+          img: "../../img/laurel.png", 
+          title: "Superior Quality", 
+          text: "Quality is of utmost importance at Tuson. We are ISO 9001 certified and in the process of getting IATF 16949 certified"
+        },
+        {
+          img: "../../img/prize.png", 
+          title: "Continuous Improvement", 
+          text: "We are always researching and implementing the latest technology and equipment for our facilities"
+        } 
+      ]
     }
     
   -
@@ -192,6 +200,7 @@ block page-content
     }     
 
   main.main-content
+    +underHeader(dataUnderHeader)
     +advantages(dataAdvantages)
     +services(dataServices)
     +call(dataCall)

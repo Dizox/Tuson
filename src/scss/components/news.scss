@@ -22,34 +22,29 @@
 
   &__item {
     width: 32%;
-    margin: 70px 2% 0px 0px;
-
-    &:nth-child(3n+3) {
-      margin-right: 0px;
-    }
+    margin: 70px auto 0px auto;
 
     @include medium {
       width: 45%;
-      margin-right: 0px;
     }
 
     @include big-phones {
       max-width: 363px;
       width: 100%;
-      margin-left: auto;
-      margin-right: auto !important;
     }
   }
 
   &__itemImg {
     width: 100%;
-    height: 249px;
+    height: fit-content;
+    max-height: 249px;
     margin-bottom: 27px;
     display: block;
-    transition: all 1s ease-out;
+    overflow: hidden;
 
-    &:hover {
-      transform: scale(1.1);
+    & img:hover {
+      transform: scale(1.1);      
+      transition: all 1s ease-out;
     }
   }
 
@@ -87,5 +82,9 @@
     &:hover{
       text-decoration: underline;
     }
+  }
+
+  @include tablets {
+    padding: 40px 0px;
   }
 }

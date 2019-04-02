@@ -3,6 +3,13 @@
   margin: 0px auto;
   padding: 0px 15px;
 
+  @include large {
+    width: 100%;
+    padding-top: 0px;
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
   &_services {
     display: flex;
     justify-content: space-between;
@@ -11,10 +18,26 @@
     padding-bottom: 120px;
   }
 
-  @include large {
-    width: 100%;
-    padding-top: 0px;
-    padding-left: 25px;
-    padding-right: 25px;
+  &_sticky {
+    padding: 0px !important;
+  }
+
+  &_underHeader {
+    padding-top: 229px;
+    padding-bottom: 160px;
+
+    @include big-tablets {
+      padding-top: 120px;
+      padding-bottom: 120px;
+    }
+
+    &-about {
+      padding-top: 189px;
+      padding-bottom: 10px;
+
+      @include big-tablets {
+        padding-top: 120px;
+      }
+    }
   }
 }

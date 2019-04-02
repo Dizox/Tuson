@@ -40,6 +40,7 @@
   &__flexColumn{
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     width: 80%;
 
     @include medium {
@@ -50,7 +51,7 @@
   }
 
   @include medium {
-    margin-bottom: 50px;
+    margin-bottom: 40px;
   }
 
   &__item {
